@@ -324,7 +324,7 @@
     inputs.countySenior.value = "180.21";
     inputs.countyTotalOptional.value = "772";
 
-    inputs.annualIncome.value = "80000";
+    inputs.annualIncome.value = "50000";
 
     onAnyChange();
   }
@@ -365,5 +365,6 @@
 
   document.addEventListener("DOMContentLoaded", init);
 })();
+
 
 
