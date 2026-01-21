@@ -1,22 +1,32 @@
 {
   "district": "Fairfield City School District",
-  "years": [2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024],
-
+  "years": [
+    2015,
+    2016,
+    2017,
+    2018,
+    2019,
+    2020,
+    2021,
+    2022,
+    2023,
+    2024
+  ],
   "uses": [
     {
       "id": "instruction",
       "name": "Instruction",
       "values": {
-        "2015": 52080501,
+        "2015": 52195183,
         "2016": 52690396,
         "2017": 61987223,
         "2018": 33098836,
         "2019": 58893995,
-        "2020": 63982312,
-        "2021": 65104118,
-        "2022": 61844296,
-        "2023": 66410523,
-        "2024": 70103418
+        "2020": 70279147,
+        "2021": 77623177,
+        "2022": 67368734,
+        "2023": 77036474,
+        "2024": 79052442
       },
       "children": [
         {
@@ -33,7 +43,8 @@
             "2022": 50319122,
             "2023": 55091717,
             "2024": 55817696
-          }
+          },
+          "desc": "General K\u201312 classroom instruction (non-special education)."
         },
         {
           "id": "instruction_special",
@@ -49,7 +60,25 @@
             "2022": 16260357,
             "2023": 20939355,
             "2024": 22167510
-          }
+          },
+          "desc": "Special education instruction and required services."
+        },
+        {
+          "id": "instruction_vocational",
+          "name": "Vocational Instruction",
+          "values": {
+            "2015": 0,
+            "2016": 0,
+            "2017": 0,
+            "2018": 0,
+            "2019": 0,
+            "2020": 0,
+            "2021": 0,
+            "2022": 0,
+            "2023": 5072,
+            "2024": 9090
+          },
+          "desc": "Career-technical/vocational instruction (when separately reported)."
         },
         {
           "id": "instruction_other",
@@ -65,11 +94,12 @@
             "2022": 789255,
             "2023": 1000330,
             "2024": 1058146
-          }
+          },
+          "desc": "Other instructional programs not classified elsewhere (varies by district coding)."
         },
         {
           "id": "instruction_benefits",
-          "name": "Health Insurance & Other Benefits (Included — Not Additional)",
+          "name": "Health Insurance & Other Benefits (Included \u2014 Not Additional)",
           "values": {
             "2015": 9846317,
             "2016": 10124890,
@@ -81,43 +111,49 @@
             "2022": 16412589,
             "2023": 17193308,
             "2024": 18210477
-          }
+          },
+          "desc": "District-paid employee benefits embedded within functional costs above (shown separately for transparency; not added again).",
+          "included": true
         },
         {
           "id": "instruction_strs",
-          "name": "STRS — Teacher Retirement (State Mandated, Included)",
+          "name": "STRS \u2014 Teacher Retirement (State Mandated, Included)",
           "values": {
             "2015": 4817232,
-            "2016": 4900450,
-            "2017": 5626046,
-            "2018": 5864951,
-            "2019": 6229808,
+            "2016": 5090808,
+            "2017": 5318004,
+            "2018": 5782620,
+            "2019": 6198828,
             "2020": 6701832,
-            "2021": 6876646,
-            "2022": 7097036,
-            "2023": 7450100,
+            "2021": 7048944,
+            "2022": 7406448,
+            "2023": 7615080,
             "2024": 7807248
-          }
+          },
+          "desc": "Employer contributions to STRS for certified staff (state-mandated; included in functional totals above).",
+          "included": true
         },
         {
           "id": "instruction_sers",
-          "name": "SERS — Staff Retirement (State Mandated, Included)",
+          "name": "SERS \u2014 Staff Retirement (State Mandated, Included)",
           "values": {
-            "2015": 1324100,
-            "2016": 1359800,
-            "2017": 1498700,
-            "2018": 1523400,
-            "2019": 1582200,
-            "2020": 1639100,
-            "2021": 1678400,
-            "2022": 1719600,
-            "2023": 1764300,
-            "2024": 1812200
-          }
+            "2015": 1629470,
+            "2016": 1648613,
+            "2017": 1730369,
+            "2018": 1805207,
+            "2019": 1904711,
+            "2020": 2013974,
+            "2021": 2003563,
+            "2022": 2068424,
+            "2023": 2170004,
+            "2024": 2138946
+          },
+          "desc": "Employer contributions to SERS for non-certified staff (state-mandated; included in functional totals above).",
+          "included": true
         }
-      ]
+      ],
+      "desc": "Direct classroom instruction and teaching-related costs (functional expenses)."
     },
-
     {
       "id": "support",
       "name": "Support Services",
@@ -132,9 +168,9 @@
         "2022": 38529187,
         "2023": 41993412,
         "2024": 44882917
-      }
+      },
+      "desc": "District-wide support services: administration, counseling, health, library/media, IT, fiscal, HR, and central office."
     },
-
     {
       "id": "operations",
       "name": "Operations & Maintenance",
@@ -149,9 +185,9 @@
         "2022": 11192984,
         "2023": 12884119,
         "2024": 13947063
-      }
+      },
+      "desc": "Facilities operations and upkeep: utilities, custodial, maintenance, repairs, and grounds."
     },
-
     {
       "id": "transportation",
       "name": "Transportation",
@@ -166,9 +202,9 @@
         "2022": 7845116,
         "2023": 8301774,
         "2024": 9126214
-      }
+      },
+      "desc": "Student transportation: busing operations, routing, fleet, fuel, and support."
     },
-
     {
       "id": "food",
       "name": "Food / Non-Instructional",
@@ -183,9 +219,9 @@
         "2022": 4683541,
         "2023": 4921336,
         "2024": 5402118
-      }
+      },
+      "desc": "Food service operations: meals, cafeteria staff, food purchases, and kitchen operations."
     },
-
     {
       "id": "extracurricular",
       "name": "Extracurricular",
@@ -200,9 +236,9 @@
         "2022": 2173912,
         "2023": 2346008,
         "2024": 2459903
-      }
+      },
+      "desc": "Student activities outside core classroom: athletics, clubs, and activities."
     },
-
     {
       "id": "interest",
       "name": "Interest & Fiscal",
@@ -217,7 +253,9 @@
         "2022": 5199570,
         "2023": 4761802,
         "2024": 5999461
-      }
+      },
+      "desc": "Debt-related and fiscal charges: bond interest and other financing costs."
     }
-  ]
+  ],
+  "schemaVersion": 3
 }
