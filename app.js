@@ -202,12 +202,17 @@
     const safeDistrictTotal = districtTotal > 0 ? districtTotal : 1;
 
     // helper to add rows
-    function addRow({ labelHtml, desc, amount, share, isChild = false }) {
+    function addRow({ labelHtml, desc, amount, share, isChild = false, isMemo = false, memoLabel = "Included" }) {
       const tr = document.createElement("tr");
-      tr.className = isChild ? "childRow" : "";
+      tr.className = [
+        isChild ? "childRow" : "",
+        isMemo ? "memoRow" : ""
+      ].filter(Boolean).join(" ");
+
+      const badge = isMemo ? `<span class="badge">${memoLabel}</span>` : "";
       tr.innerHTML = `
         <td>
-          <div class="catName">${labelHtml}</div>
+          <div class="catName">${labelHtml} ${badge}</div>
           <div class="catDesc">${desc || ""}</div>
         </td>
         <td class="num">${money(amount)}</td>
@@ -216,15 +221,17 @@
       out.schoolsTbody.appendChild(tr);
     }
 
-    // descriptions (your descriptors map — you already had these)
-    const descMap = {
+    // descriptions
+    // Prefer descriptors coming from JSON (u.desc / c.desc). Fallback to this map for older data files.
+    const descFallback = {
       instruction: "Direct classroom instruction and teaching-related costs.",
       instruction_regular: "General K–12 classroom instruction (non-special education).",
       instruction_special: "Special education instruction and required services.",
+      instruction_vocational: "Career-technical/vocational instruction (when separately reported).",
       instruction_other: "Other instructional costs not classified elsewhere.",
-      instruction_benefits: "District-paid health insurance and benefits already included.",
-      instruction_strs: "STRS employer retirement contributions for certified teachers.",
-      instruction_sers: "SERS employer retirement contributions for non-teaching staff.",
+      instruction_benefits: "Employee benefits embedded within the functional totals above (shown separately; not added again).",
+      instruction_strs: "Employer contributions to STRS (included; not additional).",
+      instruction_sers: "Employer contributions to SERS (included; not additional).",
 
       support: "Administrative, counseling, health, library, IT, finance, and central office services.",
       operations: "Building utilities, custodial services, maintenance, repairs, and grounds.",
@@ -234,17 +241,35 @@
       interest: "Interest and financing costs on bonds and long-term district debt.",
     };
 
+    function getDesc(item) {
+      return (item && typeof item.desc === "string" && item.desc.trim())
+        ? item.desc.trim()
+        : (descFallback[item?.id] || "");
+    }
+
     // main loop
     uses.forEach((u) => {
       const id = u.id;
       const amount = toNumber(u?.values?.[yearKey]);
+
+      // Guardrail: if a parent has children that are meant to roll up (non-included),
+      // the parent should equal the sum of those children for the selected year.
+      if (Array.isArray(u?.children) && u.children.length) {
+        const rollup = u.children.reduce((s, c) => {
+          if (c && c.included) return s;
+          return s + toNumber(c?.values?.[yearKey]);
+        }, 0);
+        if (rollup && Math.abs(rollup - amount) > 1) {
+          console.warn(`[data] Rollup mismatch for "${id}" in ${yearKey}: parent=${amount} children_sum=${rollup}`);
+        }
+      }
 
       // share for this top-level category
       const share = (amount / safeDistrictTotal) * csdLine;
 
       addRow({
         labelHtml: u.name || id,
-        desc: descMap[id] || "",
+        desc: getDesc(u),
         amount,
         share,
         isChild: false,
@@ -252,26 +277,33 @@
 
       // ALWAYS expand Instruction children if present
       if (id === "instruction" && Array.isArray(u.children) && u.children.length) {
-        // instruction share is the parent share computed above
-        const instructionTotal = amount > 0 ? amount : 1;
+        // Child rows under Instruction include two types:
+        //  1) additive sub-functions (Regular/Special/Other) that SHOULD roll up to Instruction
+        //  2) memo-only "included" lines (Benefits/STRS/SERS) that are already embedded in totals and must NOT be re-added
+        const denom = u.children.reduce((s, c) => {
+          if (c && c.included) return s;
+          return s + toNumber(c?.values?.[yearKey]);
+        }, 0) || 1;
 
         u.children.forEach((c) => {
-          const cId = c.id;
           const cAmount = toNumber(c?.values?.[yearKey]);
+          const isMemo = !!c.included;
 
-          // IMPORTANT: child share is proportional INSIDE instruction (so it sums to Instruction share)
-          const cShare = (cAmount / instructionTotal) * share;
+          // Additive children split the Instruction share proportionally.
+          // Memo-only children always show $0 in "Your CSD Share" to prevent double counting.
+          const cShare = isMemo ? 0 : (cAmount / denom) * share;
 
           addRow({
-            labelHtml: `↳ ${c.name || cId}`,
-            desc: descMap[cId] || "",
+            labelHtml: `↳ ${c.name || c.id}`,
+            desc: getDesc(c),
             amount: cAmount,
             share: cShare,
             isChild: true,
+            isMemo,
+            memoLabel: "Included",
           });
         });
-      }
-    });
+      }    });
   }
 
   function renderTotals() {
