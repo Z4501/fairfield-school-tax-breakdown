@@ -342,7 +342,7 @@
 
     $("openAuditorBtn")?.addEventListener("click", () => {
       // Butler County Auditor property search (generic)
-      window.open("https://auditor.butlercountyohio.org/", "_blank");
+      window.open("https://propertysearch.bcohio.gov/search/commonsearch.aspx?mode=address/", "_blank");
     });
 
     $("clearBtn")?.addEventListener("click", clearAll);
@@ -365,3 +365,4 @@
 
   document.addEventListener("DOMContentLoaded", init);
 })();
+
