@@ -22,6 +22,7 @@ body{
 
 .muted{ color: var(--muted); font-size: 13px; }
 
+/* TOPBAR */
 .topbar{
   position: sticky;
   top: 0;
@@ -97,6 +98,7 @@ select{
 }
 .btn.danger:hover{ background: rgba(239,68,68,.14); }
 
+/* LAYOUT */
 .container{
   max-width: 1180px;
   margin: 22px auto 80px;
@@ -116,12 +118,13 @@ select{
   .topbar-left{ width: 100%; }
 }
 
+/* CARDS */
 .card{
   background: var(--card);
   border: 1px solid var(--line);
   border-radius: var(--radius);
   box-shadow: var(--shadow);
-  overflow: visible; /* important: avoid “nuked/collapsed” clipping */
+  overflow: visible; /* avoid clipping weirdness */
 }
 
 .card-compact{ padding-bottom: 6px; }
@@ -146,18 +149,20 @@ h2{
   font-size: 16px;
   letter-spacing: -.2px;
 }
+
 .divider{
   height:1px;
   background: var(--line);
   margin: 0 16px;
 }
 
+/* STEPS */
 .steps{ padding: 10px 16px 12px; }
 .steps-tight ol{ margin: 8px 0 0 18px; padding: 0; }
 .stepTitle{ font-weight: 900; font-size: 13px; margin-bottom: 6px; }
-
 .steps-actions{ margin-top: 10px; }
 
+/* FORMS */
 .formGrid{
   padding: 12px 16px 12px;
   display:grid;
@@ -193,6 +198,7 @@ input:focus{
   box-shadow: 0 10px 30px rgba(37,99,235,.08);
 }
 
+/* EIT */
 .eitGrid{
   padding: 12px 16px 12px;
   display:grid;
@@ -214,6 +220,7 @@ input:focus{
   .eit-span2{ grid-column: auto; }
 }
 
+/* TOTAL CARDS (NON-FLOATING FIX) */
 .totals{
   padding: 10px 16px 14px;
   display:grid;
@@ -221,6 +228,7 @@ input:focus{
   gap: 10px 12px;
 }
 .totals-tight{ padding-top: 8px; }
+
 .mini{
   border: 1px solid var(--line);
   border-radius: 14px;
@@ -230,14 +238,15 @@ input:focus{
 .mini .k{ font-size: 12px; color: var(--muted); font-weight: 800; }
 .mini .v{ font-size: 15px; font-weight: 950; }
 
-/* STOP the floating totals bar */
+/* THIS is what was causing the "floating" stuff.
+   We keep the class but disable stickiness. */
 .totals-sticky{
-  position: static;
-  bottom: auto;
+  position: static;   /* was: sticky */
+  bottom: auto;       /* was: 12px */
   background: transparent;
 }
 
-}
+/* If you use totals-sticky-up anywhere, keep it harmless */
 .totals-sticky-up{
   margin-top: 10px;
 }
@@ -245,9 +254,10 @@ input:focus{
 /* TABLE */
 .tableWrap{
   padding: 6px 12px 0;
-  overflow: auto;  /* allow scroll if needed, but no collapse */
-  max-height: none;
+  overflow: auto;   /* safe */
+  max-height: none; /* no collapse */
 }
+
 .catTable{
   width: 100%;
   border-collapse: collapse;
@@ -256,31 +266,47 @@ input:focus{
   border-radius: 14px;
   overflow: hidden;
 }
+
 .catTable th, .catTable td{
   border-bottom: 1px solid rgba(15,23,42,.08);
-  padding: 12px 12px;
+  padding: 10px 12px;              /* slightly tighter */
   vertical-align: top;
 }
+
 .catTable th{
   text-align: left;
   font-size: 12px;
   color: var(--muted);
   background: rgba(248,250,252,.9);
 }
+
 .catTable .num{
   text-align: right;
   font-variant-numeric: tabular-nums;
   white-space: nowrap;
 }
 
-.catName{ font-weight: 950; }
-.catDesc{ font-size: 12px; color: var(--muted); margin-top: 3px; line-height: 1.25; }
+/* SCHOOLS TYPOGRAPHY (THIS is the "text too big" fix) */
+.catName{
+  font-weight: 800;   /* down from 950 */
+  font-size: 14px;    /* down from bigger feel */
+  letter-spacing: -.1px;
+}
+
+.catDesc{
+  font-size: 11.5px;  /* smaller + calmer */
+  color: var(--muted);
+  margin-top: 3px;
+  line-height: 1.2;
+}
 
 .childRow td{
   background: rgba(248,250,252,.65);
 }
+
 .childRow .catName{
-  font-weight: 900;
+  font-weight: 700;
+  font-size: 13px;
 }
 
 /* BREAKDOWN list */
