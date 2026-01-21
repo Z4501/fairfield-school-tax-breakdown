@@ -307,6 +307,35 @@ input:focus{
 .childRow .catName{
   font-weight: 700;
   font-size: 13px;
+
+
+/* Memo-only (included / not additional) rows */
+.memoRow td{
+  background: rgba(241,245,249,.55);
+}
+
+.memoRow .catName{
+  font-weight: 600;
+  opacity: .9;
+}
+
+.memoRow .catDesc{
+  font-style: italic;
+  opacity: .85;
+}
+
+.badge{
+  display:inline-block;
+  margin-left: 8px;
+  padding: 2px 8px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  font-size: 11px;
+  line-height: 1.4;
+  color: var(--muted);
+  background: rgba(255,255,255,.7);
+  vertical-align: middle;
+}
 }
 
 /* BREAKDOWN list */
