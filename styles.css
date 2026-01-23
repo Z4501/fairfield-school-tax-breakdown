@@ -202,3 +202,28 @@ select{
 .refItem .d{ margin-top:4px; color:var(--muted); font-size:12.5px; line-height:1.35; }
 
 .refnote{ margin-top:10px; color:var(--muted); font-size:12.5px; line-height:1.35; }
+/* GAAP "About the data" toggle */
+.aboutData{
+  margin-top:6px;
+  max-width:520px;
+}
+
+.aboutBtn{
+  background:transparent;
+  border:0;
+  padding:0;
+  cursor:pointer;
+  font-weight:700;
+  text-decoration:underline;
+  color:inherit;
+  opacity:.85;
+}
+
+.aboutBtn:hover{ opacity:1; }
+
+.aboutBody{
+  margin-top:6px;
+  font-size:12.5px;
+  line-height:1.35;
+  color:var(--muted);
+}
