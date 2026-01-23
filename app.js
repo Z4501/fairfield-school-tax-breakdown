@@ -393,3 +393,19 @@ main().catch(err => {
   console.error(err);
   alert("Failed to load data. Check console for details.");
 });
+
+// GAAP "About the data" toggle (safe, standalone)
+(() => {
+  const btn = document.getElementById("aboutToggle");
+  const body = document.getElementById("aboutBody");
+  if (!btn || !body) return;
+
+  btn.addEventListener("click", () => {
+    const expanded = btn.getAttribute("aria-expanded") === "true";
+    btn.setAttribute("aria-expanded", String(!expanded));
+    body.hidden = expanded;
+    btn.textContent = expanded
+      ? "About the data (GAAP) ▸"
+      : "About the data (GAAP) ▾";
+  });
+})();
