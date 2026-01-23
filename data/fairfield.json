@@ -44,7 +44,7 @@
             "2023": 55091717,
             "2024": 55817696
           },
-          "desc": "General K\u201312 classroom instruction (non-special education)."
+          "desc": "Standard K\u201312 classroom instruction (non-special education)."
         },
         {
           "id": "instruction_special",
@@ -61,7 +61,7 @@
             "2023": 20939355,
             "2024": 22167510
           },
-          "desc": "Special education instruction and required services."
+          "desc": "Special education instruction and required services (IEPs, related support)."
         },
         {
           "id": "instruction_vocational",
@@ -78,7 +78,7 @@
             "2023": 5072,
             "2024": 9090
           },
-          "desc": "Career-technical/vocational instruction (when separately reported)."
+          "desc": "Career-tech/vocational instruction (only appears when the district breaks it out separately)."
         },
         {
           "id": "instruction_other",
@@ -95,7 +95,7 @@
             "2023": 1000330,
             "2024": 1058146
           },
-          "desc": "Other instructional programs not classified elsewhere (varies by district coding)."
+          "desc": "Other instructional programs not classified elsewhere (district coding varies)."
         },
         {
           "id": "instruction_benefits",
@@ -152,110 +152,159 @@
           "included": true
         }
       ],
-      "desc": "Direct classroom instruction and teaching-related costs (functional expenses)."
+      "desc": "Classroom teaching costs (what most people think of as 'instruction')."
     },
     {
       "id": "support",
       "name": "Support Services",
       "values": {
-        "2015": 15141576,
+        "2015": 15229859,
         "2016": 15245145,
         "2017": 18139305,
         "2018": 10046074,
         "2019": 18346111,
-        "2020": 41487963,
-        "2021": 43268771,
-        "2022": 38529187,
-        "2023": 41993412,
+        "2020": 23688636,
+        "2021": 23086608,
+        "2022": 20149154,
+        "2023": 24377320,
         "2024": 24832464
       },
-      "desc": "District-wide support services: administration, counseling, health, library/media, IT, fiscal, HR, and central office."
+      "desc": "Student + district support (counselors, nurses, aides, principals, central office, IT, HR, fiscal). Not classroom teaching, but keeps schools running."
     },
     {
       "id": "operations",
       "name": "Operations & Maintenance",
       "values": {
-        "2015": 5393764,
+        "2015": 5441327,
         "2016": 5730829,
         "2017": 6862131,
         "2018": 1771651,
         "2019": 6728287,
-        "2020": 12846771,
-        "2021": 13211554,
-        "2022": 11192984,
-        "2023": 12884119,
+        "2020": 6526002,
+        "2021": 7384020,
+        "2022": 6717475,
+        "2023": 8061381,
         "2024": 7116030
       },
-      "desc": "Facilities operations and upkeep: utilities, custodial, maintenance, repairs, and grounds."
+      "desc": "Buildings & grounds (utilities, custodians, maintenance, repairs, security/grounds)."
     },
     {
       "id": "transportation",
       "name": "Transportation",
       "values": {
-        "2015": 6594544,
+        "2015": 6023683,
         "2016": 5574146,
         "2017": 7627099,
         "2018": 4864748,
         "2019": 6951465,
-        "2020": 6971802,
-        "2021": 7423665,
-        "2022": 7845116,
-        "2023": 8301774,
+        "2020": 7703527,
+        "2021": 8300440,
+        "2022": 8103276,
+        "2023": 9241562,
         "2024": 8642906
       },
-      "desc": "Student transportation: busing operations, routing, fleet, fuel, and support."
+      "desc": "Busing & transportation (drivers, routing, fleet, fuel, garage)."
     },
     {
       "id": "food",
       "name": "Food / Non-Instructional",
       "values": {
-        "2015": 4753220,
+        "2015": 4781145,
         "2016": 5079069,
         "2017": 5297270,
         "2018": 3196704,
         "2019": 5079028,
-        "2020": 3219554,
-        "2021": 3987441,
-        "2022": 4683541,
-        "2023": 4921336,
+        "2020": 6235214,
+        "2021": 5835796,
+        "2022": 6154403,
+        "2023": 6998054,
         "2024": 7049520
       },
-      "desc": "Food service operations: meals, cafeteria staff, food purchases, and kitchen operations."
+      "desc": "Cafeterias & meals (food purchases, kitchen staff, meal programs)."
     },
     {
       "id": "extracurricular",
       "name": "Extracurricular",
       "values": {
-        "2015": 1785132,
+        "2015": 1570907,
         "2016": 1359208,
         "2017": 2136820,
         "2018": 1121487,
         "2019": 1785500,
-        "2020": 1975894,
-        "2021": 2114229,
-        "2022": 2173912,
-        "2023": 2346008,
+        "2020": 2060145,
+        "2021": 1962557,
+        "2022": 1962016,
+        "2023": 2312283,
         "2024": 2254859
       },
-      "desc": "Student activities outside core classroom: athletics, clubs, and activities."
+      "desc": "Sports, clubs, and student activities outside core classes."
     },
     {
       "id": "interest",
       "name": "Interest & Fiscal",
       "values": {
-        "2015": 4004153,
+        "2015": 3764240,
         "2016": 3283493,
         "2017": 3215423,
         "2018": 3189667,
         "2019": 3012675,
-        "2020": 2807701,
-        "2021": 3192810,
-        "2022": 5199570,
-        "2023": 4761802,
+        "2020": 2799326,
+        "2021": 1907938,
+        "2022": 2013548,
+        "2023": 1986764,
         "2024": 1972933
       },
-      "desc": "Debt-related and fiscal charges: bond interest and other financing costs."
+      "desc": "Debt costs (bond interest) and related financing costs (includes bond issuance costs when reported)."
     }
   ],
-  "schemaVersion": 3
+  "schemaVersion": 3,
+  "auditBasis": "GAAP \u2014 Governmental Activities (Statement of Activities) \u2014 expenses only",
+  "auditScopeNote": "Totals and category values come from the GAAP Statement of Activities (government-wide). Benefits/STRS/SERS lines are shown for transparency only and are already included in functional totals; they must not be added again.",
+  "auditAnchors": {
+    "2015": {
+      "source_pdf": "Fairfield_CSD_15-Butler.pdf",
+      "statement_of_activities_page_index_0based": 21
+    },
+    "2016": {
+      "source_pdf": "Fairfield_CSD_16-Butler.pdf",
+      "statement_of_activities_page_index_0based": 20
+    },
+    "2017": {
+      "source_pdf": "Fairfield_CSD_17-Butler.pdf",
+      "statement_of_activities_page_index_0based": 20
+    },
+    "2018": {
+      "source_pdf": "Fairfield_CSD_18-Butler.pdf",
+      "statement_of_activities_page_index_0based": 22
+    },
+    "2019": {
+      "source_pdf": "Fairfield_CSD_19-Butler.pdf",
+      "statement_of_activities_page_index_0based": 19
+    },
+    "2020": {
+      "source_pdf": "Fairfield_City_School_District_20-Butler_FINAL_unlocked.pdf",
+      "statement_of_activities_page_index_0based": 19
+    },
+    "2021": {
+      "source_pdf": "Fairfield_City_School_District_2021-Butler_FINAL_unlocked.pdf",
+      "statement_of_activities_page_index_0based": 20
+    },
+    "2022": {
+      "source_pdf": "Fairfield_City_School_District_2022_Butler_FINAL (1)_unlocked.pdf",
+      "statement_of_activities_page_index_0based": 20
+    },
+    "2023": {
+      "source_pdf": "Fairfield_City_School_District_2023_Butler_FINAL_unlocked.pdf",
+      "statement_of_activities_page_index_0based": 20
+    },
+    "2024": {
+      "source_pdf": "Fairfield_City_School_District_2024_Butler_FINAL (1)_unlocked.pdf",
+      "statement_of_activities_page_index_0based": 20
+    }
+  },
+  "yearNotes": {},
+  "classificationNotes": [
+    "For every year, category totals tie exactly to the GAAP Statement of Activities 'Totals' (or 'Total Governmental Activities') expense column.",
+    "In FY2015 and FY2020, 'Bond Issuance Costs' is reported as a separate line on the Statement of Activities and is included here under 'Interest & Fiscal' so the totals reconcile."
+  ]
 }
