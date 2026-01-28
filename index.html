@@ -21,12 +21,10 @@
         <div class="chipK">District Spending Total (GAAP)</div>
         <div class="chipV" id="chipDistrictSpend">$0.00</div>
       </div>
-
       <div class="chipCard">
         <div class="chipK">Your City Schools Share</div>
         <div class="chipV" id="chipCitySchoolsShare">$0.00</div>
       </div>
-
       <div class="chipCard">
         <div class="chipK">Total Property Tax</div>
         <div class="chipV" id="chipTotalPropertyTax">$0.00</div>
@@ -39,273 +37,267 @@
         <select id="yearSelect"></select>
       </div>
 
-      <button class="btn" id="fillExampleBtn" type="button">Fill Example (A07 demo)</button>
-      <button class="btn danger" id="clearBtn" type="button">Clear</button>
+      <div class="demoPresets" id="demoPresets">
+        <div class="demoPresetsTitle">Demo presets</div>
+        <div class="demoPresetsBtns">
+          <button class="btn" id="demoHouseBtn" type="button">Autofill Demo: Single-Family (A07)</button>
+          <button class="btn" id="demoAptBtn" type="button">Autofill Demo: Apartment Complex (72 units)</button>
+          <button class="btn danger" id="clearBtn" type="button">Clear</button>
+        </div>
+      </div>
     </div>
   </header>
 
-  <main class="container">
-
-    <!-- ROW 1 -->
-    <section class="layout-row row-equal">
-      <!-- Property Tax Distribution -->
-      <article class="card card-compact">
+  <main class="page">
+    <section class="grid">
+      <!-- LEFT TOP: instructions -->
+      <article class="card">
         <div class="cardHead">
           <div class="chip">PROPERTY TAX DISTRIBUTION</div>
           <h2>Paste-in Actual Property Taxes</h2>
-          <p class="muted">Copy these from the Butler County Auditor — <b>Tax Summary → Tax Distribution → TAX AMOUNT</b>.</p>
+          <p class="muted">
+            Copy these from the Butler County Auditor —
+            <b>Tax Summary</b> → <b>Tax Distribution</b> → <b>TAX AMOUNT</b>.
+          </p>
         </div>
+
         <div class="divider"></div>
 
-        <div class="steps steps-tight">
+        <div class="steps">
           <div class="stepTitle">Step 1 — Copy these numbers from the Auditor Tax Summary</div>
           <ol>
             <li>Open your property in Butler County Auditor Property Search</li>
             <li>Click <b>Tax Summary</b></li>
             <li>Under <b>Tax Distribution</b>, copy each <b>TAX AMOUNT</b> below</li>
           </ol>
-
-          <div class="steps-actions">
-            <button class="btn" id="openAuditorBtn" type="button">Open Auditor Search</button>
-          </div>
+          <button class="btn" id="openAuditorBtn" type="button">Open Auditor Search</button>
         </div>
       </article>
 
-      <!-- Proposed Tax -->
-      <article class="card accent card-compact">
-        <div class="cardHead">
-          <div class="chip">PROPOSED TAX</div>
-          <h2>Proposed 1.25% Earned Income Tax (EIT)</h2>
-          <p class="muted">Not law yet. Quick estimate only. Not included in allocations below.</p>
-        </div>
-        <div class="divider"></div>
-
-        <div class="eitGrid eitGrid-compact">
-          <div class="field eit-span2">
-            <label for="annualIncome">Annual earned income ($)</label>
-            <input id="annualIncome" inputmode="decimal" placeholder="80000" />
+      <div class="layout-row row-equal">
+        <!-- Property tax inputs -->
+        <article class="card card-compact">
+          <div class="cardHead">
+            <div class="chip">PROPERTY TAX INPUTS</div>
+            <h2>Property tax lines (paste amounts)</h2>
+            <p class="muted">These are the exact tax lines you see in the Auditor’s <b>Tax Distribution</b> table. <b> Enabling per-unit mode does not change any values you enter. It only divides the totals to show an estimated per-unit share, which appears only in the two tables below and in the summary totals at the top.</b></p>
           </div>
+          <div class="divider"></div>
 
-          <div class="stat">
-            <div class="muted">Rate</div>
-            <div class="statVal">1.25%</div>
-          </div>
-
-          <div class="stat">
-            <div class="muted">Estimated per year</div>
-            <div class="statVal" id="eitYear">$0.00</div>
-            <div class="muted" style="margin-top:6px;">Estimated per month</div>
-            <div style="font-weight:950;" id="eitMonth">$0.00</div>
-          </div>
-        </div>
-      </article>
-    </section>
-
-    <!-- ROW 2 -->
-    <section class="layout-row row-equal">
-      <!-- Property tax inputs -->
-      <article class="card card-compact">
-        <div class="cardHead">
-          <div class="chip">PROPERTY TAX INPUTS</div>
-
-          <!-- header row: title/desc on left + apartment panel on right -->
-          <div class="headRow">
-            <div class="headLeft">
-              <h2>Property tax lines (paste amounts)</h2>
-              <p class="muted">These are the exact tax lines you see in the Auditor’s <b>Tax Distribution</b> table.</p>
+          <!-- Apartment / per-unit mode -->
+          <div class="aptBox">
+            <div class="aptTop">
+              <div class="aptTitle">Apartment / Complex</div>
+              <label class="aptToggle">
+                <input type="checkbox" id="perUnitToggle" />
+                <span>Per-unit mode</span>
+              </label>
             </div>
 
-            <!-- NEW: Apartment/Complex per-unit panel -->
-            <div class="aptBox" id="aptBox">
-              <div class="aptTop">
-                <div class="aptTitle">Apartment / Complex</div>
-                <label class="aptToggle" title="Divide parcel totals by unit count for per-unit estimates (does not change what you pasted).">
-                  <input type="checkbox" id="aptEnable" />
-                  <span>Per-unit mode</span>
-                </label>
+            <div class="aptRow">
+              <div class="field">
+                <label for="unitCount">Units</label>
+                <input id="unitCount" inputmode="numeric" placeholder="e.g., 72" />
               </div>
-
-              <div class="aptRow">
-                <label class="aptLabel" for="aptUnits">Units</label>
-                <input class="aptInput" id="aptUnits" inputmode="numeric" placeholder="e.g., 48" disabled />
-              </div>
-
-              <div class="aptMini muted" id="aptMiniNote">
-                Optional: enter unit count to estimate per-unit shares (chips + school allocation).
-              </div>
-
-              <div class="aptMiniKV">
-                <div class="k">Per-unit factor</div>
-                <div class="v" id="aptFactor">Off</div>
+              <div class="aptMeta">
+                <div class="muted small">
+                  Optional: enter unit count to estimate a per-unit share from a single parcel’s tax distribution.
+                </div>
+                <div class="aptFactor" id="perUnitStatus">Per-unit factor: Off</div>
               </div>
             </div>
           </div>
-        </div>
 
-        <div class="divider"></div>
+          <div class="formGrid">
+            <div class="field">
+              <label for="taxButlerCounty">Butler County /</label>
+              <input class="countyTintMini" id="taxButlerCounty" inputmode="decimal" placeholder="772.00" />
+            </div>
 
-        <div class="formGrid">
-          <div class="field">
-            <label for="taxButlerCounty">Butler County /</label>
-            <input class="countyTintMini" id="taxButlerCounty" inputmode="decimal" placeholder="722" />
+            <div class="field">
+              <label for="taxFairfieldCsd">Fairfield CSD /</label>
+              <input id="taxFairfieldCsd" inputmode="decimal" placeholder="3066.17" />
+            </div>
+
+            <div class="field">
+              <label for="taxFairfieldCity">Fairfield City /</label>
+              <input id="taxFairfieldCity" inputmode="decimal" placeholder="1095.69" />
+            </div>
+
+            <div class="field">
+              <label for="taxButlerJvsd">Butler County JVSD /</label>
+              <input id="taxButlerJvsd" inputmode="decimal" placeholder="241.78" />
+            </div>
+
+            <div class="field">
+              <label for="taxMetroParks">Metro Parks of Butler County /</label>
+              <input id="taxMetroParks" inputmode="decimal" placeholder="71.33" />
+            </div>
+
+            <div class="field">
+              <label for="taxLibrary">Lane Public Library District /</label>
+              <input id="taxLibrary" inputmode="decimal" placeholder="54.77" />
+            </div>
           </div>
 
-          <div class="field">
-            <label for="taxFairfieldCsd">Fairfield CSD /</label>
-            <input id="taxFairfieldCsd" inputmode="decimal" placeholder="3066" />
+          <div class="totalsRow">
+            <div class="totalCard">
+              <div class="totalLabel">Total Property Tax (calculated)</div>
+              <div class="totalVal" id="totalPropertyTax">$0.00</div>
+            </div>
+
+            <div class="totalCard countyTint">
+              <div class="totalLabel">County Portion Total (entered)</div>
+              <div class="totalVal" id="countyPortionTotal">$0.00</div>
+            </div>
+          </div>
+        </article>
+
+        <!-- County portion only -->
+        <article class="card card-compact">
+          <div class="cardHead">
+            <div class="chip">COUNTY PORTION ONLY</div>
+            <h2>County Portion Only (breakdown of the Butler County line)</h2>
+            <p class="muted">
+              These line-items are the components of your “<b>Butler County</b> /” tax line on the Auditor table.
+              Paste each item if listed for your property.
+            </p>
           </div>
 
-          <div class="field">
-            <label for="taxFairfieldCity">Fairfield City /</label>
-            <input id="taxFairfieldCity" inputmode="decimal" placeholder="1095" />
+          <div class="divider"></div>
+
+          <div class="formGrid twoCol">
+            <div class="field">
+              <label for="countyGeneralFund">General Fund</label>
+              <input class="countyTintMini" id="countyGeneralFund" inputmode="decimal" placeholder="125.28" />
+            </div>
+
+            <div class="field">
+              <label for="countyDd">Developmental Disabilities</label>
+              <input class="countyTintMini" id="countyDd" inputmode="decimal" placeholder="190.19" />
+            </div>
+
+            <div class="field">
+              <label for="countyMentalHealth">Mental Health</label>
+              <input class="countyTintMini" id="countyMentalHealth" inputmode="decimal" placeholder="133.81" />
+            </div>
+
+            <div class="field">
+              <label for="countyChildren">Children Services</label>
+              <input class="countyTintMini" id="countyChildren" inputmode="decimal" placeholder="142.51" />
+            </div>
+
+            <div class="field">
+              <label for="countySenior">Senior Citizens</label>
+              <input class="countyTintMini" id="countySenior" inputmode="decimal" placeholder="180.21" />
+            </div>
+
+            <div class="field">
+              <label for="countyTotalOptional">County Total Tax (optional)</label>
+              <input id="countyTotalOptional" inputmode="decimal" placeholder="772.00" />
+            </div>
+          </div>
+        </article>
+      </div>
+
+      <!-- Schools + reference -->
+      <section class="layout-row row-equal">
+        <article class="card">
+          <div class="cardHead">
+            <div class="chip">SCHOOLS</div>
+            <h2>School spending categories (district-wide)</h2>
+            <p class="muted">
+              District totals come from audited financials (GAAP). “Your Share” is proportional to the Fairfield CSD tax line you entered above.
+            </p>
           </div>
 
-          <div class="field">
-            <label for="taxButlerJvsd">Butler County JVSD /</label>
-            <input id="taxButlerJvsd" inputmode="decimal" placeholder="241" />
+          <div class="divider"></div>
+
+          <div class="schoolsTop">
+            <div class="schoolsStat">
+              <div class="schoolsStatLabel">District Spending Total (GAAP)</div>
+              <div class="schoolsStatVal" id="districtSpendingTotal">$0.00</div>
+            </div>
+            <div class="schoolsStat">
+              <div class="schoolsStatLabel">Your City Schools Share</div>
+              <div class="schoolsStatVal" id="csdShareTotal">$0.00</div>
+            </div>
           </div>
 
-          <div class="field">
-            <label for="taxMetroParks">Metro Parks of Butler County /</label>
-            <input id="taxMetroParks" inputmode="decimal" placeholder="71" />
-          </div>
-
-          <div class="field">
-            <label for="taxLibrary">Lane Public Library District /</label>
-            <input id="taxLibrary" inputmode="decimal" placeholder="54" />
-          </div>
-        </div>
-
-        <div class="totals totals-tight">
-          <div class="mini">
-            <div class="k">Total Property Tax (calculated)</div>
-            <div class="v" id="totalPropertyTax">$0.00</div>
-          </div>
-
-          <div class="mini countyTintMini">
-            <div class="k">County Portion Total (entered)</div>
-            <div class="v" id="countyPortionTotal">$0.00</div>
-          </div>
-        </div>
-      </article>
-
-      <!-- County portion breakdown -->
-      <article class="card countyCard card-compact">
-        <div class="cardHead">
-          <div class="chip countyChip">COUNTY PORTION ONLY</div>
-          <h2>County Portion Only (breakdown of the Butler County line)</h2>
-          <p class="muted">
-            These line-items are the components of your “<b>Butler County /</b>” tax line on the Auditor table.
-            Paste each item if listed for your property.
-          </p>
-        </div>
-        <div class="divider"></div>
-
-        <div class="formGrid">
-          <div class="field">
-            <label for="countyGeneralFund">General Fund</label>
-            <input class="countyTintMini" id="countyGeneralFund" inputmode="decimal" placeholder="125.28" />
-          </div>
-
-          <div class="field">
-            <label for="countyDd">Developmental Disabilities</label>
-            <input class="countyTintMini" id="countyDd" inputmode="decimal" placeholder="190.19" />
-          </div>
-
-          <div class="field">
-            <label for="countyMentalHealth">Mental Health</label>
-            <input class="countyTintMini" id="countyMentalHealth" inputmode="decimal" placeholder="133.81" />
-          </div>
-
-          <div class="field">
-            <label for="countyChildren">Children Services</label>
-            <input class="countyTintMini" id="countyChildren" inputmode="decimal" placeholder="142.51" />
-          </div>
-
-          <div class="field">
-            <label for="countySenior">Senior Citizens</label>
-            <input class="countyTintMini" id="countySenior" inputmode="decimal" placeholder="180.21" />
-          </div>
-
-          <div class="field">
-            <label for="countyTotalOptional">County Total Tax (optional)</label>
-            <input id="countyTotalOptional" inputmode="decimal" placeholder="772" />
-          </div>
-        </div>
-      </article>
-    </section>
-
-    <!-- ROW 3 -->
-    <section class="layout-row row-equal">
-      <!-- Schools -->
-      <article class="card">
-        <div class="cardHead">
-          <div class="chip">SCHOOLS</div>
-          <h2>Where your Fairfield CSD money goes</h2>
-          <p class="muted">
-            Your <b>City Schools Share</b> allocates only the Fairfield CSD amount you pasted above across district spending
-            categories for the selected year. <b>Instruction is always expanded</b>.<br><span class="muted">Note: Benefits/STRS/SERS are embedded within functional expenses under GAAP and are shown (when present) for transparency only — they are not added to totals.</span>
-          </p>
-        </div>
-        <div class="divider"></div>
-
-        <div class="tableWrap">
-          <table class="catTable" id="schoolsTable">
+          <table class="schoolsTable">
             <thead>
               <tr>
                 <th>Category</th>
-                <th class="num">Amount</th>
-                <th class="num">Your City Schools Share</th>
+                <th class="num">District Total</th>
+                <th class="num">Your Share</th>
               </tr>
             </thead>
             <tbody id="schoolsTbody"></tbody>
           </table>
-        </div>
+        </article>
 
-        <div class="totals totals-sticky totals-sticky-up">
-          <div class="mini">
-            <div class="k">District Spending Total (GAAP)</div>
-            <div class="v" id="districtSpendingTotal">$0.00</div>
+        <article class="card">
+          <div class="cardHead">
+            <div class="chip">REFERENCE</div>
+            <h2>What your tax lines generally fund</h2>
+            <p class="muted">
+              These descriptions are general purpose. Exact allocation depends on local budgets, levies, and restrictions.
+            </p>
           </div>
 
-          <div class="mini">
-            <div class="k">Your City Schools Share Total</div>
-            <div class="v" id="csdShareTotal">$0.00</div>
-          </div>
-        </div>
-      </article>
+          <div class="divider"></div>
 
-      <!-- Breakdown -->
+          <div class="refTotals">
+            <div class="refTotal">
+              <div class="refTotalLabel">Tax lines total</div>
+              <div class="refTotalVal" id="refLinesTotal">$0.00</div>
+            </div>
+            <div class="refTotal">
+              <div class="refTotalLabel">County items total</div>
+              <div class="refTotalVal" id="refCountyItemsTotal">$0.00</div>
+            </div>
+          </div>
+
+          <div class="refList" id="refList"></div>
+        </article>
+      </section>
+    
+
+      <!-- PROPOSED TAX (moved to bottom) -->
       <article class="card">
         <div class="cardHead">
-          <div class="chip">BREAKDOWN</div>
-          <h2>Property tax line explanations</h2>
-          <p class="muted">
-            Descriptions only. Dollar amounts shown are what you pasted above (i.e., collected for that line item).
-            <span class="muted">If per-unit mode is on, the top chips + school allocation use per-unit estimates.</span>
-          </p>
+          <div class="chip">PROPOSED TAX</div>
+          <h2>Proposed 1.25% Earned Income Tax (EIT)</h2>
+          <p class="muted">Not law yet. Quick estimate only. Not included in the allocations above. This is a calculator only.</p>
         </div>
+
         <div class="divider"></div>
 
-        <div class="reflist" id="refList"></div>
-
-        <div class="totals totals-tight">
-          <div class="mini">
-            <div class="k">Tax lines total (pasted)</div>
-            <div class="v" id="refLinesTotal">$0.00</div>
+        <div class="eitGrid">
+          <div class="field">
+            <label for="annualIncome">Annual earned income ($)</label>
+            <input id="annualIncome" inputmode="decimal" placeholder="50000" />
           </div>
-          <div class="mini countyTintMini">
-            <div class="k">County line-items total (pasted)</div>
-            <div class="v" id="refCountyItemsTotal">$0.00</div>
-          </div>
-        </div>
 
-        <div class="refnote countyNote">
-          Note: Police / fire / EMS / 911 can appear under City lines, County lines, or special districts depending on how your area is structured.
-          “Butler County /” is not automatically “police” — sheriff and county operations are different from city police.
+          <div class="eitRate">
+            <div class="eitRateLabel">Rate</div>
+            <div class="eitRateVal">1.25%</div>
+          </div>
+
+          <div class="eitTotals">
+            <div class="eitBox">
+              <div class="eitBoxLabel">Estimated per year</div>
+              <div class="eitBoxVal" id="eitYear">$0.00</div>
+            </div>
+            <div class="eitBox">
+              <div class="eitBoxLabel">Estimated per month</div>
+              <div class="eitBoxVal" id="eitMonth">$0.00</div>
+            </div>
+          </div>
         </div>
       </article>
-    </section>
+
+</section>
   </main>
 
   <script src="./app.js"></script>
