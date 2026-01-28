@@ -19,12 +19,55 @@
     return Math.max(a, Math.min(b, n));
   }
 
+  function getUnitFactor() {
+    const enabled = !!aptEnable?.checked;
+    const unitsRaw = aptUnits ? Math.floor(toNumber(aptUnits.value)) : 0;
+    const units = unitsRaw > 0 ? unitsRaw : 0;
+    const factor = enabled && units >= 1 ? (1 / units) : 1;
+    return { enabled, units, factor };
+  }
+
+  function renderApt() {
+    if (!aptEnable || !aptUnits || !aptFactorEl) return;
+    const { enabled, units, factor } = getUnitFactor();
+
+    // toggle input enabled state
+    aptUnits.disabled = !enabled;
+
+    if (!enabled) {
+      aptFactorEl.textContent = "Off";
+      aptMiniNote &&
+        (aptMiniNote.textContent =
+          "Optional: enter unit count to estimate per-unit shares (chips + school allocation).");
+      return;
+    }
+
+    if (units < 1) {
+      aptFactorEl.textContent = "Enter units";
+      aptMiniNote &&
+        (aptMiniNote.textContent =
+          "Per-unit mode is ON — enter the number of units (e.g., 48).");
+      return;
+    }
+
+    aptFactorEl.textContent = `1 / ${units} (${(factor * 100).toFixed(2)}%)`;
+    aptMiniNote &&
+      (aptMiniNote.textContent =
+        "Per-unit mode is ON — outputs below are divided by unit count (inputs remain parcel totals).");
+  }
+
   // ---------- state ----------
   let DATA = null;
   let selectedYear = null;
 
   // ---------- elements ----------
   const yearSelect = $("yearSelect");
+
+  // apartment / complex per-unit mode
+  const aptEnable = $("aptEnable");
+  const aptUnits = $("aptUnits");
+  const aptFactorEl = $("aptFactor");
+  const aptMiniNote = $("aptMiniNote");
 
   const inputs = {
     taxButlerCounty: $("taxButlerCounty"),
@@ -97,12 +140,48 @@
 
   function getTaxLines() {
     const lines = [
-      { id: "butler", label: "Butler County /", el: inputs.taxButlerCounty, desc: "Countywide services (courts/jail, sheriff functions, some roads & infrastructure, human services/public health, admin)." },
-      { id: "city", label: "Fairfield City /", el: inputs.taxFairfieldCity, desc: "City services can include streets/roads, police, fire, EMS/911, parks, admin (structure varies)." },
-      { id: "csd", label: "Fairfield CSD /", el: inputs.taxFairfieldCsd, desc: "School district tax line. This drives “Your City Schools Share.”" },
-      { id: "jvsd", label: "Butler County JVSD /", el: inputs.taxButlerJvsd, desc: "Joint vocational school district (career/tech education)." },
-      { id: "parks", label: "Metro Parks of Butler County /", el: inputs.taxMetroParks, desc: "County metro parks system (parks, trails, maintenance)." },
-      { id: "library", label: "Lane Public Library District /", el: inputs.taxLibrary, desc: "Public library levy/service district." },
+      {
+        id: "butler",
+        label: "Butler County /",
+        el: inputs.taxButlerCounty,
+        desc:
+          "Countywide services (courts/jail, sheriff functions, some roads & infrastructure, human services/public health, admin).",
+      },
+      {
+        id: "csd",
+        label: "Fairfield CSD /",
+        el: inputs.taxFairfieldCsd,
+        desc:
+          "School district operating + debt (instruction, support, transportation, facilities, etc.).",
+      },
+      {
+        id: "city",
+        label: "Fairfield City /",
+        el: inputs.taxFairfieldCity,
+        desc:
+          "City services can include streets/roads, police, fire, EMS/911, parks, admin (structure varies).",
+      },
+      {
+        id: "jvsd",
+        label: "Butler County JVSD /",
+        el: inputs.taxButlerJvsd,
+        desc:
+          "Joint vocational school district (career technical education).",
+      },
+      {
+        id: "parks",
+        label: "Metro Parks of Butler County /",
+        el: inputs.taxMetroParks,
+        desc:
+          "County metro parks levy/board line.",
+      },
+      {
+        id: "library",
+        label: "Lane Public Library District /",
+        el: inputs.taxLibrary,
+        desc:
+          "Public library district levy/board line.",
+      },
     ];
 
     const amounts = {};
@@ -112,11 +191,41 @@
 
   function getCountyItems() {
     const items = [
-      { id: "gen", label: "General Fund", el: inputs.countyGeneralFund, desc: "County operations (admin, courts, jail, sheriff functions, roads/infrastructure)." },
-      { id: "dd", label: "Developmental Disabilities", el: inputs.countyDd, desc: "County Board of DD programs/services." },
-      { id: "mh", label: "Mental Health", el: inputs.countyMentalHealth, desc: "Mental health/addiction levy/board line." },
-      { id: "cs", label: "Children Services", el: inputs.countyChildren, desc: "Children services levy/board line." },
-      { id: "sr", label: "Senior Citizens", el: inputs.countySenior, desc: "Senior services levy/board line." },
+      {
+        id: "gf",
+        label: "General Fund",
+        el: inputs.countyGeneralFund,
+        desc:
+          "General county operations (admin, courts, sheriff-related, etc. depends on county budgeting).",
+      },
+      {
+        id: "dd",
+        label: "Developmental Disabilities",
+        el: inputs.countyDd,
+        desc:
+          "County DD services levy line.",
+      },
+      {
+        id: "mh",
+        label: "Mental Health",
+        el: inputs.countyMentalHealth,
+        desc:
+          "Mental health services levy line.",
+      },
+      {
+        id: "cs",
+        label: "Children Services",
+        el: inputs.countyChildren,
+        desc:
+          "Children services levy line.",
+      },
+      {
+        id: "sc",
+        label: "Senior Citizens",
+        el: inputs.countySenior,
+        desc:
+          "Senior services levy/board line.",
+      },
     ];
     const vals = items.map((x) => toNumber(x.el.value));
     const total = vals.reduce((a, b) => a + b, 0);
@@ -125,6 +234,7 @@
 
   // ---------- rendering ----------
   function renderBreakdown() {
+    const { factor } = getUnitFactor();
     const { lines, amounts } = getTaxLines();
     const { total: countyItemsTotal } = getCountyItems();
 
@@ -143,7 +253,7 @@
           <div class="refTitle">${x.label}</div>
           <div class="refDesc">${x.desc}</div>
         </div>
-        <div class="refAmt">${money(amt)}</div>
+        <div class="refAmt">${money(amt * factor)}</div>
       `;
       out.refList.appendChild(row);
 
@@ -165,7 +275,7 @@
               <div class="refTitle">${ci.label}</div>
               <div class="refDesc">${ci.desc}</div>
             </div>
-            <div class="refAmt">${money(val)}</div>
+            <div class="refAmt">${money(val * factor)}</div>
           `;
           out.refList.appendChild(ciRow);
         });
@@ -174,8 +284,8 @@
 
     const totalLines = Object.values(amounts).reduce((a, b) => a + b, 0);
 
-    out.refLinesTotal.textContent = money(totalLines);
-    out.refCountyItemsTotal.textContent = money(countyItemsTotal);
+    out.refLinesTotal.textContent = money(totalLines * factor);
+    out.refCountyItemsTotal.textContent = money(countyItemsTotal * factor);
   }
 
   function renderSchools() {
@@ -183,10 +293,15 @@
 
     const yearKey = String(selectedYear);
     const uses = Array.isArray(DATA.uses) ? DATA.uses : [];
-    const csdLine = toNumber(inputs.taxFairfieldCsd.value); // "Your City Schools Share"
+
+    const { factor } = getUnitFactor();
+    const csdLine = toNumber(inputs.taxFairfieldCsd.value) * factor; // scaled for per-unit mode
 
     // compute district total from top-level uses only (NOT children)
-    const districtTotal = uses.reduce((sum, u) => sum + toNumber(u?.values?.[yearKey]), 0);
+    const districtTotal = uses.reduce(
+      (sum, u) => sum + toNumber(u?.values?.[yearKey]),
+      0
+    );
 
     out.districtSpendingTotal.textContent = money(districtTotal);
     out.csdShareTotal.textContent = money(csdLine);
@@ -202,12 +317,19 @@
     const safeDistrictTotal = districtTotal > 0 ? districtTotal : 1;
 
     // helper to add rows
-    function addRow({ labelHtml, desc, amount, share, isChild = false, isMemo = false, memoLabel = "Included" }) {
+    function addRow({
+      labelHtml,
+      desc,
+      amount,
+      share,
+      isChild = false,
+      isMemo = false,
+      memoLabel = "Included",
+    }) {
       const tr = document.createElement("tr");
-      tr.className = [
-        isChild ? "childRow" : "",
-        isMemo ? "memoRow" : ""
-      ].filter(Boolean).join(" ");
+      tr.className = [isChild ? "childRow" : "", isMemo ? "memoRow" : ""]
+        .filter(Boolean)
+        .join(" ");
 
       const badge = isMemo ? `<span class="badge">${memoLabel}</span>` : "";
       tr.innerHTML = `
@@ -225,44 +347,39 @@
     // Prefer descriptors coming from JSON (u.desc / c.desc). Fallback to this map for older data files.
     const descFallback = {
       instruction: "Direct classroom instruction and teaching-related costs.",
-      instruction_regular: "General K–12 classroom instruction (non-special education).",
-      instruction_special: "Special education instruction and required services.",
-      instruction_vocational: "Career-technical/vocational instruction (when separately reported).",
-      instruction_other: "Other instructional costs not classified elsewhere.",
-      instruction_benefits: "Employee benefits embedded within the functional totals above (shown separately; not added again).",
-      instruction_strs: "Employer contributions to STRS (included; not additional).",
-      instruction_sers: "Employer contributions to SERS (included; not additional).",
-
-      support: "Administrative, counseling, health, library, IT, finance, and central office services.",
-      operations: "Building utilities, custodial services, maintenance, repairs, and grounds.",
-      transportation: "Busing, fleet operations, routing, fuel, and transportation support.",
-      food: "School meal programs, cafeteria staff, food purchases, and kitchen operations.",
-      extracurricular: "Athletics, clubs, activities, and extracurricular programs.",
-      interest: "Interest and financing costs on bonds and long-term district debt.",
+      instruction_regular:
+        "General K–12 classroom instruction (non-special education).",
+      instruction_special:
+        "Special education instruction and required services.",
+      instruction_vocational:
+        "Career-technical/vocational instruction (when reported here).",
+      instruction_other: "Other instructional programs/services.",
+      support_services:
+        "Guidance, support staff, athletics/activities support, transportation support, and other support functions (varies).",
+      operation_maintenance:
+        "Facilities operations, maintenance, utilities, custodial, repairs.",
+      food: "Food service operations.",
+      non_instructional: "Non-instructional programs (varies).",
+      interest_fiscal:
+        "Debt interest and fiscal charges (bond/notes interest, debt issuance costs where applicable).",
+      capital_outlay:
+        "Capital projects and major equipment/building improvements.",
+      extracurricular:
+        "Athletics and extracurricular programs (when separated).",
+      benefits: "Benefits are included inside the category totals (not added on top).",
+      strs: "STRS is included inside totals (not added on top).",
+      sers: "SERS is included inside totals (not added on top).",
     };
 
-    function getDesc(item) {
-      return (item && typeof item.desc === "string" && item.desc.trim())
-        ? item.desc.trim()
-        : (descFallback[item?.id] || "");
+    function getDesc(node) {
+      if (node?.desc) return node.desc;
+      const id = (node?.id || "").toLowerCase();
+      return descFallback[id] || "";
     }
 
-    // main loop
     uses.forEach((u) => {
-      const id = u.id;
+      const id = (u?.id || u?.name || "").toLowerCase();
       const amount = toNumber(u?.values?.[yearKey]);
-
-      // Guardrail: if a parent has children that are meant to roll up (non-included),
-      // the parent should equal the sum of those children for the selected year.
-      if (Array.isArray(u?.children) && u.children.length) {
-        const rollup = u.children.reduce((s, c) => {
-          if (c && c.included) return s;
-          return s + toNumber(c?.values?.[yearKey]);
-        }, 0);
-        if (rollup && Math.abs(rollup - amount) > 1) {
-          console.warn(`[data] Rollup mismatch for "${id}" in ${yearKey}: parent=${amount} children_sum=${rollup}`);
-        }
-      }
 
       // share for this top-level category
       const share = (amount / safeDistrictTotal) * csdLine;
@@ -286,34 +403,46 @@
         }, 0) || 1;
 
         u.children.forEach((c) => {
-          const cAmount = toNumber(c?.values?.[yearKey]);
-          const isMemo = !!c.included;
+          const cAmt = toNumber(c?.values?.[yearKey]);
 
-          // Additive children split the Instruction share proportionally.
-          // Memo-only children always show $0 in "Your CSD Share" to prevent double counting.
-          const cShare = isMemo ? 0 : (cAmount / denom) * share;
+          if (c && c.included) {
+            // memo-only: show "Included" and do NOT allocate additional dollars
+            addRow({
+              labelHtml: `↳ ${c.name || c.id || "Included line"}`,
+              desc: getDesc(c),
+              amount: cAmt,
+              share: 0,
+              isChild: true,
+              isMemo: true,
+              memoLabel: "Included",
+            });
+          } else {
+            // additive instruction breakdown: allocate proportional share of Instruction share
+            const cShare =
+              ((cAmt / denom) * (amount / safeDistrictTotal) * csdLine);
 
-          addRow({
-            labelHtml: `↳ ${c.name || c.id}`,
-            desc: getDesc(c),
-            amount: cAmount,
-            share: cShare,
-            isChild: true,
-            isMemo,
-            memoLabel: "Included",
-          });
+            addRow({
+              labelHtml: `↳ ${c.name || c.id || "Instruction detail"}`,
+              desc: getDesc(c),
+              amount: cAmt,
+              share: cShare,
+              isChild: true,
+            });
+          }
         });
-      }    });
+      }
+    });
   }
 
   function renderTotals() {
+    const { factor } = getUnitFactor();
     const { amounts } = getTaxLines();
     const totalLines = Object.values(amounts).reduce((a, b) => a + b, 0);
-    out.totalPropertyTax.textContent = money(totalLines);
-    out.chipTotalPropertyTax.textContent = money(totalLines);
+    out.totalPropertyTax.textContent = money(totalLines * factor);
+    out.chipTotalPropertyTax.textContent = money(totalLines * factor);
 
     const { total: countyItemsTotal } = getCountyItems();
-    out.countyPortionTotal.textContent = money(countyItemsTotal);
+    out.countyPortionTotal.textContent = money(countyItemsTotal * factor);
   }
 
   function renderEit() {
@@ -326,6 +455,7 @@
   }
 
   function onAnyChange() {
+    renderApt();
     renderTotals();
     renderEit();
     renderBreakdown();
@@ -337,6 +467,8 @@
       if (!el) return;
       el.value = "";
     });
+    if (aptEnable) aptEnable.checked = false;
+    if (aptUnits) aptUnits.value = "";
     onAnyChange();
   }
 
@@ -358,6 +490,10 @@
 
     inputs.annualIncome.value = "50000";
 
+    // leave per-unit mode OFF by default in demo
+    if (aptEnable) aptEnable.checked = false;
+    if (aptUnits) aptUnits.value = "";
+
     onAnyChange();
   }
 
@@ -371,6 +507,17 @@
       if (!el) return;
       el.addEventListener("input", onAnyChange);
     });
+
+    // apartment per-unit mode
+    aptEnable?.addEventListener("change", () => {
+      if (aptUnits) {
+        aptUnits.disabled = !aptEnable.checked;
+        if (aptEnable.checked) aptUnits.focus();
+      }
+      onAnyChange();
+    });
+
+    aptUnits?.addEventListener("input", onAnyChange);
 
     $("openAuditorBtn")?.addEventListener("click", () => {
       // Butler County Auditor property search (generic)
@@ -391,12 +538,12 @@
     selectedYear = years.length ? years[years.length - 1] : 2024;
     yearSelect.value = String(selectedYear);
 
+    // ensure apt input starts disabled unless checked
+    if (aptUnits && aptEnable) aptUnits.disabled = !aptEnable.checked;
+
     wireEvents();
     onAnyChange();
   }
 
   document.addEventListener("DOMContentLoaded", init);
 })();
-
-
-
