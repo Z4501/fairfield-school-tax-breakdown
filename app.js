@@ -15,59 +15,15 @@
     return x.toLocaleString(undefined, { style: "currency", currency: "USD" });
   }
 
-  function clamp(n, a, b) {
-    return Math.max(a, Math.min(b, n));
-  }
-
-  function getUnitFactor() {
-    const enabled = !!aptEnable?.checked;
-    const unitsRaw = aptUnits ? Math.floor(toNumber(aptUnits.value)) : 0;
-    const units = unitsRaw > 0 ? unitsRaw : 0;
-    const factor = enabled && units >= 1 ? (1 / units) : 1;
-    return { enabled, units, factor };
-  }
-
-  function renderApt() {
-    if (!aptEnable || !aptUnits || !aptFactorEl) return;
-    const { enabled, units, factor } = getUnitFactor();
-
-    // toggle input enabled state
-    aptUnits.disabled = !enabled;
-
-    if (!enabled) {
-      aptFactorEl.textContent = "Off";
-      aptMiniNote &&
-        (aptMiniNote.textContent =
-          "Optional: enter unit count to estimate per-unit shares (chips + school allocation).");
-      return;
-    }
-
-    if (units < 1) {
-      aptFactorEl.textContent = "Enter units";
-      aptMiniNote &&
-        (aptMiniNote.textContent =
-          "Per-unit mode is ON — enter the number of units (e.g., 48).");
-      return;
-    }
-
-    aptFactorEl.textContent = `1 / ${units} (${(factor * 100).toFixed(2)}%)`;
-    aptMiniNote &&
-      (aptMiniNote.textContent =
-        "Per-unit mode is ON — outputs below are divided by unit count (inputs remain parcel totals).");
-  }
-
   // ---------- state ----------
   let DATA = null;
   let selectedYear = null;
 
   // ---------- elements ----------
   const yearSelect = $("yearSelect");
-
-  // apartment / complex per-unit mode
-  const aptEnable = $("aptEnable");
-  const aptUnits = $("aptUnits");
-  const aptFactorEl = $("aptFactor");
-  const aptMiniNote = $("aptMiniNote");
+  const perUnitToggle = $("perUnitToggle");
+  const unitCount = $("unitCount");
+  const perUnitStatus = $("perUnitStatus");
 
   const inputs = {
     taxButlerCounty: $("taxButlerCounty"),
@@ -108,10 +64,32 @@
     schoolsTbody: $("schoolsTbody"),
   };
 
+  // ---------- per-unit ----------
+  function getPerUnitFactor() {
+    const enabled = !!perUnitToggle?.checked;
+    const units = Math.round(toNumber(unitCount?.value));
+    if (!enabled || !Number.isFinite(units) || units <= 1) return 1;
+    return 1 / units;
+  }
+
+  function renderPerUnitStatus() {
+    if (!perUnitStatus) return;
+    const enabled = !!perUnitToggle?.checked;
+    const units = Math.round(toNumber(unitCount?.value));
+    if (!enabled) {
+      perUnitStatus.textContent = "Per-unit factor: Off";
+      return;
+    }
+    if (!Number.isFinite(units) || units <= 1) {
+      perUnitStatus.textContent = "Per-unit factor: On (enter units)";
+      return;
+    }
+    perUnitStatus.textContent = `Per-unit factor: 1/${units}`;
+  }
+
   // ---------- load data ----------
   async function loadJson() {
-    // Try ./data/fairfield.json first (your folder screenshot),
-    // then fallback to ./fairfield.json if you move it.
+    // Try ./data/fairfield.json first, then fallback to ./fairfield.json
     const paths = ["./data/fairfield.json", "./fairfield.json"];
     let lastErr = null;
 
@@ -140,48 +118,12 @@
 
   function getTaxLines() {
     const lines = [
-      {
-        id: "butler",
-        label: "Butler County /",
-        el: inputs.taxButlerCounty,
-        desc:
-          "Countywide services (courts/jail, sheriff functions, some roads & infrastructure, human services/public health, admin).",
-      },
-      {
-        id: "csd",
-        label: "Fairfield CSD /",
-        el: inputs.taxFairfieldCsd,
-        desc:
-          "School district operating + debt (instruction, support, transportation, facilities, etc.).",
-      },
-      {
-        id: "city",
-        label: "Fairfield City /",
-        el: inputs.taxFairfieldCity,
-        desc:
-          "City services can include streets/roads, police, fire, EMS/911, parks, admin (structure varies).",
-      },
-      {
-        id: "jvsd",
-        label: "Butler County JVSD /",
-        el: inputs.taxButlerJvsd,
-        desc:
-          "Joint vocational school district (career technical education).",
-      },
-      {
-        id: "parks",
-        label: "Metro Parks of Butler County /",
-        el: inputs.taxMetroParks,
-        desc:
-          "County metro parks levy/board line.",
-      },
-      {
-        id: "library",
-        label: "Lane Public Library District /",
-        el: inputs.taxLibrary,
-        desc:
-          "Public library district levy/board line.",
-      },
+      { id: "butler", label: "Butler County /", el: inputs.taxButlerCounty, desc: "Countywide services (courts/jail, sheriff functions, some roads & infrastructure, human services/public health, admin)." },
+      { id: "csd", label: "Fairfield CSD /", el: inputs.taxFairfieldCsd, desc: "School district tax line. This drives “Your City Schools Share.”" },
+      { id: "city", label: "Fairfield City /", el: inputs.taxFairfieldCity, desc: "City services can include streets/roads, police, fire, EMS/911, parks, admin (structure varies)." },
+      { id: "jvsd", label: "Butler County JVSD /", el: inputs.taxButlerJvsd, desc: "Joint vocational school district (career/tech education)." },
+      { id: "parks", label: "Metro Parks of Butler County /", el: inputs.taxMetroParks, desc: "MetroParks levy and operations (parks, trails, conservation)." },
+      { id: "library", label: "Lane Public Library District /", el: inputs.taxLibrary, desc: "Public library levy and operations." },
     ];
 
     const amounts = {};
@@ -191,258 +133,28 @@
 
   function getCountyItems() {
     const items = [
-      {
-        id: "gf",
-        label: "General Fund",
-        el: inputs.countyGeneralFund,
-        desc:
-          "General county operations (admin, courts, sheriff-related, etc. depends on county budgeting).",
-      },
-      {
-        id: "dd",
-        label: "Developmental Disabilities",
-        el: inputs.countyDd,
-        desc:
-          "County DD services levy line.",
-      },
-      {
-        id: "mh",
-        label: "Mental Health",
-        el: inputs.countyMentalHealth,
-        desc:
-          "Mental health services levy line.",
-      },
-      {
-        id: "cs",
-        label: "Children Services",
-        el: inputs.countyChildren,
-        desc:
-          "Children services levy line.",
-      },
-      {
-        id: "sc",
-        label: "Senior Citizens",
-        el: inputs.countySenior,
-        desc:
-          "Senior services levy/board line.",
-      },
+      { id: "gf", label: "General Fund", el: inputs.countyGeneralFund, desc: "General county operations and services." },
+      { id: "dd", label: "Developmental Disabilities", el: inputs.countyDd, desc: "DDS levy and services." },
+      { id: "mh", label: "Mental Health", el: inputs.countyMentalHealth, desc: "Mental health services and programs." },
+      { id: "cs", label: "Children Services", el: inputs.countyChildren, desc: "Children Services levy and operations." },
+      { id: "sc", label: "Senior Citizens", el: inputs.countySenior, desc: "Senior services levy and programs." },
     ];
-    const vals = items.map((x) => toNumber(x.el.value));
-    const total = vals.reduce((a, b) => a + b, 0);
+
+    const total = items.reduce((sum, i) => sum + toNumber(i.el.value), 0);
     return { items, total };
   }
 
-  // ---------- rendering ----------
-  function renderBreakdown() {
-    const { factor } = getUnitFactor();
-    const { lines, amounts } = getTaxLines();
-    const { total: countyItemsTotal } = getCountyItems();
-
-    out.refList.innerHTML = "";
-
-    lines.forEach((x) => {
-      const amt = amounts[x.id] || 0;
-      const row = document.createElement("div");
-      row.className = "refRow";
-
-      // highlight Butler County row to visually connect to the county breakdown
-      if (x.id === "butler") row.classList.add("countyHighlightRow");
-
-      row.innerHTML = `
-        <div class="refLeft">
-          <div class="refTitle">${x.label}</div>
-          <div class="refDesc">${x.desc}</div>
-        </div>
-        <div class="refAmt">${money(amt * factor)}</div>
-      `;
-      out.refList.appendChild(row);
-
-      // Insert shaded header before county items list
-      if (x.id === "library") {
-        const sep = document.createElement("div");
-        sep.className = "refSep";
-        sep.innerHTML = `<div class="refSepTitle">County Portion Only (breakdown of the Butler County line)</div>`;
-        out.refList.appendChild(sep);
-
-        // Show the 5 county items as mini rows (shaded)
-        const { items } = getCountyItems();
-        items.forEach((ci) => {
-          const val = toNumber(ci.el.value);
-          const ciRow = document.createElement("div");
-          ciRow.className = "refRow countyItemRow";
-          ciRow.innerHTML = `
-            <div class="refLeft">
-              <div class="refTitle">${ci.label}</div>
-              <div class="refDesc">${ci.desc}</div>
-            </div>
-            <div class="refAmt">${money(val * factor)}</div>
-          `;
-          out.refList.appendChild(ciRow);
-        });
-      }
-    });
-
-    const totalLines = Object.values(amounts).reduce((a, b) => a + b, 0);
-
-    out.refLinesTotal.textContent = money(totalLines * factor);
-    out.refCountyItemsTotal.textContent = money(countyItemsTotal * factor);
-  }
-
-  function renderSchools() {
-    if (!DATA) return;
-
-    const yearKey = String(selectedYear);
-    const uses = Array.isArray(DATA.uses) ? DATA.uses : [];
-
-    const { factor } = getUnitFactor();
-    const csdLine = toNumber(inputs.taxFairfieldCsd.value) * factor; // scaled for per-unit mode
-
-    // compute district total from top-level uses only (NOT children)
-    const districtTotal = uses.reduce(
-      (sum, u) => sum + toNumber(u?.values?.[yearKey]),
-      0
-    );
-
-    out.districtSpendingTotal.textContent = money(districtTotal);
-    out.csdShareTotal.textContent = money(csdLine);
-
-    // chips
-    out.chipDistrictSpend.textContent = money(districtTotal);
-    out.chipCitySchoolsShare.textContent = money(csdLine);
-
-    // table
-    out.schoolsTbody.innerHTML = "";
-
-    // If districtTotal is 0, prevent NaN propagation
-    const safeDistrictTotal = districtTotal > 0 ? districtTotal : 1;
-
-    // helper to add rows
-    function addRow({
-      labelHtml,
-      desc,
-      amount,
-      share,
-      isChild = false,
-      isMemo = false,
-      memoLabel = "Included",
-    }) {
-      const tr = document.createElement("tr");
-      tr.className = [isChild ? "childRow" : "", isMemo ? "memoRow" : ""]
-        .filter(Boolean)
-        .join(" ");
-
-      const badge = isMemo ? `<span class="badge">${memoLabel}</span>` : "";
-      tr.innerHTML = `
-        <td>
-          <div class="catName">${labelHtml} ${badge}</div>
-          <div class="catDesc">${desc || ""}</div>
-        </td>
-        <td class="num">${money(amount)}</td>
-        <td class="num">${money(share)}</td>
-      `;
-      out.schoolsTbody.appendChild(tr);
-    }
-
-    // descriptions
-    // Prefer descriptors coming from JSON (u.desc / c.desc). Fallback to this map for older data files.
-    const descFallback = {
-      instruction: "Direct classroom instruction and teaching-related costs.",
-      instruction_regular:
-        "General K–12 classroom instruction (non-special education).",
-      instruction_special:
-        "Special education instruction and required services.",
-      instruction_vocational:
-        "Career-technical/vocational instruction (when reported here).",
-      instruction_other: "Other instructional programs/services.",
-      support_services:
-        "Guidance, support staff, athletics/activities support, transportation support, and other support functions (varies).",
-      operation_maintenance:
-        "Facilities operations, maintenance, utilities, custodial, repairs.",
-      food: "Food service operations.",
-      non_instructional: "Non-instructional programs (varies).",
-      interest_fiscal:
-        "Debt interest and fiscal charges (bond/notes interest, debt issuance costs where applicable).",
-      capital_outlay:
-        "Capital projects and major equipment/building improvements.",
-      extracurricular:
-        "Athletics and extracurricular programs (when separated).",
-      benefits: "Benefits are included inside the category totals (not added on top).",
-      strs: "STRS is included inside totals (not added on top).",
-      sers: "SERS is included inside totals (not added on top).",
-    };
-
-    function getDesc(node) {
-      if (node?.desc) return node.desc;
-      const id = (node?.id || "").toLowerCase();
-      return descFallback[id] || "";
-    }
-
-    uses.forEach((u) => {
-      const id = (u?.id || u?.name || "").toLowerCase();
-      const amount = toNumber(u?.values?.[yearKey]);
-
-      // share for this top-level category
-      const share = (amount / safeDistrictTotal) * csdLine;
-
-      addRow({
-        labelHtml: u.name || id,
-        desc: getDesc(u),
-        amount,
-        share,
-        isChild: false,
-      });
-
-      // ALWAYS expand Instruction children if present
-      if (id === "instruction" && Array.isArray(u.children) && u.children.length) {
-        // Child rows under Instruction include two types:
-        //  1) additive sub-functions (Regular/Special/Other) that SHOULD roll up to Instruction
-        //  2) memo-only "included" lines (Benefits/STRS/SERS) that are already embedded in totals and must NOT be re-added
-        const denom = u.children.reduce((s, c) => {
-          if (c && c.included) return s;
-          return s + toNumber(c?.values?.[yearKey]);
-        }, 0) || 1;
-
-        u.children.forEach((c) => {
-          const cAmt = toNumber(c?.values?.[yearKey]);
-
-          if (c && c.included) {
-            // memo-only: show "Included" and do NOT allocate additional dollars
-            addRow({
-              labelHtml: `↳ ${c.name || c.id || "Included line"}`,
-              desc: getDesc(c),
-              amount: cAmt,
-              share: 0,
-              isChild: true,
-              isMemo: true,
-              memoLabel: "Included",
-            });
-          } else {
-            // additive instruction breakdown: allocate proportional share of Instruction share
-            const cShare =
-              ((cAmt / denom) * (amount / safeDistrictTotal) * csdLine);
-
-            addRow({
-              labelHtml: `↳ ${c.name || c.id || "Instruction detail"}`,
-              desc: getDesc(c),
-              amount: cAmt,
-              share: cShare,
-              isChild: true,
-            });
-          }
-        });
-      }
-    });
-  }
-
   function renderTotals() {
-    const { factor } = getUnitFactor();
+    const f = getPerUnitFactor();
     const { amounts } = getTaxLines();
-    const totalLines = Object.values(amounts).reduce((a, b) => a + b, 0);
-    out.totalPropertyTax.textContent = money(totalLines * factor);
-    out.chipTotalPropertyTax.textContent = money(totalLines * factor);
+    const totalLinesParcel = Object.values(amounts).reduce((a, b) => a + b, 0);
+    const totalLines = totalLinesParcel * f;
 
-    const { total: countyItemsTotal } = getCountyItems();
-    out.countyPortionTotal.textContent = money(countyItemsTotal * factor);
+    out.totalPropertyTax.textContent = money(totalLines);
+    out.chipTotalPropertyTax.textContent = money(totalLines);
+
+    const { total: countyItemsTotalParcel } = getCountyItems();
+    out.countyPortionTotal.textContent = money(countyItemsTotalParcel * f);
   }
 
   function renderEit() {
@@ -454,8 +166,120 @@
     out.eitMonth.textContent = money(monthly);
   }
 
+  function renderBreakdown() {
+    const f = getPerUnitFactor();
+    const { lines, amounts } = getTaxLines();
+    const { items, total: countyItemsTotalParcel } = getCountyItems();
+
+    out.refList.innerHTML = "";
+
+    lines.forEach((x) => {
+      const amt = (amounts[x.id] || 0) * f;
+      const row = document.createElement("div");
+      row.className = "refRow";
+      if (x.id === "butler") row.classList.add("countyHighlightRow");
+
+      row.innerHTML = `
+        <div class="refLeft">
+          <div class="refTitle">${x.label}</div>
+          <div class="refDesc">${x.desc}</div>
+        </div>
+        <div class="refAmt">${money(amt)}</div>
+      `;
+      out.refList.appendChild(row);
+    });
+
+    const sep = document.createElement("div");
+    sep.className = "refSep";
+    sep.innerHTML = `<div class="refSepTitle">County Portion Only (breakdown of the Butler County line)</div>`;
+    out.refList.appendChild(sep);
+
+    items.forEach((ci) => {
+      const val = toNumber(ci.el.value) * f;
+      const ciRow = document.createElement("div");
+      ciRow.className = "refRow countyItemRow";
+      ciRow.innerHTML = `
+        <div class="refLeft">
+          <div class="refTitle">${ci.label}</div>
+          <div class="refDesc">${ci.desc}</div>
+        </div>
+        <div class="refAmt">${money(val)}</div>
+      `;
+      out.refList.appendChild(ciRow);
+    });
+
+    const totalLinesParcel = Object.values(amounts).reduce((a, b) => a + b, 0);
+    out.refLinesTotal.textContent = money(totalLinesParcel * f);
+    out.refCountyItemsTotal.textContent = money(countyItemsTotalParcel * f);
+  }
+
+  function renderSchools() {
+    if (!DATA) return;
+
+    const f = getPerUnitFactor();
+    const yearKey = String(selectedYear);
+    const uses = Array.isArray(DATA.uses) ? DATA.uses : [];
+
+    const csdLineParcel = toNumber(inputs.taxFairfieldCsd.value);
+    const csdLine = csdLineParcel * f;
+
+    const districtTotal = uses.reduce((sum, u) => sum + toNumber(u?.values?.[yearKey]), 0);
+    const safeDistrictTotal = districtTotal > 0 ? districtTotal : 1;
+
+    out.districtSpendingTotal.textContent = money(districtTotal);
+    out.csdShareTotal.textContent = money(csdLine);
+
+    out.chipDistrictSpend.textContent = money(districtTotal);
+    out.chipCitySchoolsShare.textContent = money(csdLine);
+
+    out.schoolsTbody.innerHTML = "";
+
+    function addRow({ labelHtml, desc, amount, share, isChild = false }) {
+      const tr = document.createElement("tr");
+      tr.className = isChild ? "childRow" : "";
+
+      tr.innerHTML = `
+        <td>
+          <div class="catName">${labelHtml}</div>
+          <div class="catDesc">${desc || ""}</div>
+        </td>
+        <td class="num">${money(amount)}</td>
+        <td class="num">${money(share)}</td>
+      `;
+      out.schoolsTbody.appendChild(tr);
+    }
+
+    uses.forEach((u) => {
+      const amount = toNumber(u?.values?.[yearKey]);
+      const share = (amount / safeDistrictTotal) * csdLine;
+      const hasChildren = Array.isArray(u.children) && u.children.length > 0;
+
+      addRow({
+        labelHtml: hasChildren ? `<span class="caret">▸</span> ${u.name || u.id || "Category"}` : (u.name || u.id || "Category"),
+        desc: u.desc || "",
+        amount,
+        share
+      });
+
+      if (hasChildren) {
+        u.children.forEach((c) => {
+          const cAmount = toNumber(c?.values?.[yearKey]);
+          const cShare = (cAmount / safeDistrictTotal) * csdLine;
+
+          addRow({
+            labelHtml: `<span class="childIndent"></span>${c.name || c.id || "Detail"}`,
+            desc: c.desc || "",
+            amount: cAmount,
+            share: cShare,
+            isChild: true
+          });
+        });
+      }
+    });
+  }
+
   function onAnyChange() {
-    renderApt();
+    renderPerUnitStatus();
     renderTotals();
     renderEit();
     renderBreakdown();
@@ -467,33 +291,52 @@
       if (!el) return;
       el.value = "";
     });
-    if (aptEnable) aptEnable.checked = false;
-    if (aptUnits) aptUnits.value = "";
+    if (perUnitToggle) perUnitToggle.checked = false;
+    if (unitCount) unitCount.value = "";
+    renderPerUnitStatus();
     onAnyChange();
   }
 
-  function fillExample() {
-    // demo numbers matching your screenshots
-    inputs.taxButlerCounty.value = "722";
-    inputs.taxFairfieldCsd.value = "3066";
-    inputs.taxFairfieldCity.value = "1095";
-    inputs.taxButlerJvsd.value = "241";
-    inputs.taxMetroParks.value = "71";
-    inputs.taxLibrary.value = "54";
+  function fillExample(which) {
+    if (which === "apt72") {
+      // Timber Hollow Apartments (parcel totals) — enable per-unit mode with 72 units
+      inputs.taxButlerCounty.value = "12354.10";
+      inputs.taxFairfieldCsd.value = "56508.66";
+      inputs.taxFairfieldCity.value = "15912.32";
+      inputs.taxButlerJvsd.value = "3095.70";
+      inputs.taxMetroParks.value = "1001.80";
+      inputs.taxLibrary.value = "941.10";
 
-    inputs.countyGeneralFund.value = "125.28";
-    inputs.countyDd.value = "190.19";
-    inputs.countyMentalHealth.value = "133.81";
-    inputs.countyChildren.value = "142.51";
-    inputs.countySenior.value = "180.21";
-    inputs.countyTotalOptional.value = "772";
+      inputs.countyGeneralFund.value = "1603.99";
+      inputs.countyDd.value = "3626.85";
+      inputs.countyMentalHealth.value = "2010.94";
+      inputs.countyChildren.value = "2417.90";
+      inputs.countySenior.value = "2694.42";
+      inputs.countyTotalOptional.value = "12354.10";
+
+      if (perUnitToggle) perUnitToggle.checked = true;
+      if (unitCount) unitCount.value = "72";
+    } else {
+      // Single-family A07 demo (parcel totals)
+      inputs.taxButlerCounty.value = "772.00";
+      inputs.taxFairfieldCsd.value = "3066.17";
+      inputs.taxFairfieldCity.value = "1095.69";
+      inputs.taxButlerJvsd.value = "241.78";
+      inputs.taxMetroParks.value = "71.33";
+      inputs.taxLibrary.value = "54.77";
+
+      inputs.countyGeneralFund.value = "125.28";
+      inputs.countyDd.value = "190.19";
+      inputs.countyMentalHealth.value = "133.81";
+      inputs.countyChildren.value = "142.51";
+      inputs.countySenior.value = "180.21";
+      inputs.countyTotalOptional.value = "772.00";
+
+      if (perUnitToggle) perUnitToggle.checked = false;
+      if (unitCount) unitCount.value = "";
+    }
 
     inputs.annualIncome.value = "50000";
-
-    // leave per-unit mode OFF by default in demo
-    if (aptEnable) aptEnable.checked = false;
-    if (aptUnits) aptUnits.value = "";
-
     onAnyChange();
   }
 
@@ -508,24 +351,16 @@
       el.addEventListener("input", onAnyChange);
     });
 
-    // apartment per-unit mode
-    aptEnable?.addEventListener("change", () => {
-      if (aptUnits) {
-        aptUnits.disabled = !aptEnable.checked;
-        if (aptEnable.checked) aptUnits.focus();
-      }
-      onAnyChange();
-    });
-
-    aptUnits?.addEventListener("input", onAnyChange);
-
     $("openAuditorBtn")?.addEventListener("click", () => {
-      // Butler County Auditor property search (generic)
       window.open("https://auditor.bcohio.gov/", "_blank");
     });
 
+    $("demoHouseBtn")?.addEventListener("click", () => fillExample("house"));
+    $("demoAptBtn")?.addEventListener("click", () => fillExample("apt72"));
     $("clearBtn")?.addEventListener("click", clearAll);
-    $("fillExampleBtn")?.addEventListener("click", fillExample);
+
+    perUnitToggle?.addEventListener("change", onAnyChange);
+    unitCount?.addEventListener("input", onAnyChange);
   }
 
   async function init() {
@@ -534,12 +369,8 @@
     const years = Array.isArray(DATA.years) ? DATA.years : [];
     buildYearSelect(years);
 
-    // default to last year
     selectedYear = years.length ? years[years.length - 1] : 2024;
     yearSelect.value = String(selectedYear);
-
-    // ensure apt input starts disabled unless checked
-    if (aptUnits && aptEnable) aptUnits.disabled = !aptEnable.checked;
 
     wireEvents();
     onAnyChange();
