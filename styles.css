@@ -156,6 +156,101 @@ h2{
   margin: 0 16px;
 }
 
+/* NEW: header row for Property Tax Inputs (title/desc left + apt panel right) */
+.headRow{
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap: 14px;
+}
+.headLeft{ min-width: 0; }
+.headLeft p{ margin: 6px 0 0; }
+
+@media (max-width: 860px){
+  .headRow{ flex-direction: column; }
+}
+
+/* --- Apartment / Complex (Per-Unit) panel --- */
+.aptBox{
+  width: 320px;
+  border:1px solid var(--line);
+  border-radius:14px;
+  padding:10px 12px;
+  background: rgba(255,255,255,.70);
+  box-shadow: 0 6px 16px rgba(15,23,42,.05);
+}
+
+.aptTop{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  margin-bottom:8px;
+}
+
+.aptTitle{
+  font-weight: 950;
+  font-size: 13px;
+  letter-spacing: -.1px;
+}
+
+.aptToggle{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  font-size:12.5px;
+  color: var(--muted);
+  user-select:none;
+  white-space: nowrap;
+}
+
+.aptRow{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  margin:6px 0 8px;
+}
+
+.aptLabel{
+  font-size:12.5px;
+  color: var(--muted);
+  width:44px;
+}
+
+.aptInput{
+  flex:1;
+  width: 100%;
+  padding: 9px 10px;
+  border-radius: 12px;
+  border: 1px solid var(--line);
+  background: rgba(255,255,255,.85);
+  outline: none;
+}
+
+.aptInput:disabled{
+  opacity:.60;
+  cursor:not-allowed;
+}
+
+.aptMini{ font-size: 12px; line-height: 1.25; margin-top: 6px; }
+
+.aptMiniKV{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-top:8px;
+  padding-top:8px;
+  border-top:1px solid var(--line);
+  font-size:12.5px;
+}
+
+.aptMiniKV .k{ color: var(--muted); font-weight: 800; }
+.aptMiniKV .v{ font-weight: 950; }
+
+@media (max-width: 860px){
+  .aptBox{ width: 100%; }
+}
+
 /* STEPS */
 .steps{ padding: 10px 16px 12px; }
 .steps-tight ol{ margin: 8px 0 0 18px; padding: 0; }
@@ -307,7 +402,7 @@ input:focus{
 .childRow .catName{
   font-weight: 700;
   font-size: 13px;
-
+}
 
 /* Memo-only (included / not additional) rows */
 .memoRow td{
@@ -335,7 +430,6 @@ input:focus{
   color: var(--muted);
   background: rgba(255,255,255,.7);
   vertical-align: middle;
-}
 }
 
 /* BREAKDOWN list */
