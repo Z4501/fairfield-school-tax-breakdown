@@ -107,9 +107,41 @@
       <article class="card card-compact">
         <div class="cardHead">
           <div class="chip">PROPERTY TAX INPUTS</div>
-          <h2>Property tax lines (paste amounts)</h2>
-          <p class="muted">These are the exact tax lines you see in the Auditor’s <b>Tax Distribution</b> table.</p>
+
+          <!-- header row: title/desc on left + apartment panel on right -->
+          <div class="headRow">
+            <div class="headLeft">
+              <h2>Property tax lines (paste amounts)</h2>
+              <p class="muted">These are the exact tax lines you see in the Auditor’s <b>Tax Distribution</b> table.</p>
+            </div>
+
+            <!-- NEW: Apartment/Complex per-unit panel -->
+            <div class="aptBox" id="aptBox">
+              <div class="aptTop">
+                <div class="aptTitle">Apartment / Complex</div>
+                <label class="aptToggle" title="Divide parcel totals by unit count for per-unit estimates (does not change what you pasted).">
+                  <input type="checkbox" id="aptEnable" />
+                  <span>Per-unit mode</span>
+                </label>
+              </div>
+
+              <div class="aptRow">
+                <label class="aptLabel" for="aptUnits">Units</label>
+                <input class="aptInput" id="aptUnits" inputmode="numeric" placeholder="e.g., 48" disabled />
+              </div>
+
+              <div class="aptMini muted" id="aptMiniNote">
+                Optional: enter unit count to estimate per-unit shares (chips + school allocation).
+              </div>
+
+              <div class="aptMiniKV">
+                <div class="k">Per-unit factor</div>
+                <div class="v" id="aptFactor">Off</div>
+              </div>
+            </div>
+          </div>
         </div>
+
         <div class="divider"></div>
 
         <div class="formGrid">
@@ -212,7 +244,7 @@
           <h2>Where your Fairfield CSD money goes</h2>
           <p class="muted">
             Your <b>City Schools Share</b> allocates only the Fairfield CSD amount you pasted above across district spending
-            categories for the selected year. <b>Instruction is always expanded</b>.<br><span class=\"muted\">Note: Benefits/STRS/SERS are embedded within functional expenses under GAAP and are shown (when present) for transparency only — they are not added to totals.</span>
+            categories for the selected year. <b>Instruction is always expanded</b>.<br><span class="muted">Note: Benefits/STRS/SERS are embedded within functional expenses under GAAP and are shown (when present) for transparency only — they are not added to totals.</span>
           </p>
         </div>
         <div class="divider"></div>
@@ -248,7 +280,10 @@
         <div class="cardHead">
           <div class="chip">BREAKDOWN</div>
           <h2>Property tax line explanations</h2>
-          <p class="muted">Descriptions only. Dollar amounts shown are what you pasted above (i.e., collected for that line item).</p>
+          <p class="muted">
+            Descriptions only. Dollar amounts shown are what you pasted above (i.e., collected for that line item).
+            <span class="muted">If per-unit mode is on, the top chips + school allocation use per-unit estimates.</span>
+          </p>
         </div>
         <div class="divider"></div>
 
@@ -276,6 +311,3 @@
   <script src="./app.js"></script>
 </body>
 </html>
-
-
-
