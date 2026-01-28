@@ -2,495 +2,442 @@
   --bg: radial-gradient(900px 480px at 20% 10%, rgba(37,99,235,.14), transparent 70%),
         radial-gradient(900px 480px at 80% 80%, rgba(16,185,129,.12), transparent 70%),
         #f6f8fc;
-  --card: rgba(255,255,255,.75);
+
+  --card: rgba(255,255,255,.82);
+  --card2: rgba(255,255,255,.72);
   --line: rgba(15,23,42,.12);
-  --text: #0f172a;
-  --muted: rgba(15,23,42,.65);
-  --blue: #2563eb;
-  --shadow: 0 10px 30px rgba(15,23,42,.08);
-  --radius: 18px;
+  --muted: rgba(15,23,42,.62);
+  --text: rgba(15,23,42,.92);
+  --blue: rgb(37,99,235);
+  --green: rgb(16,185,129);
+  --shadow: 0 10px 30px rgba(2,6,23,.10);
 }
 
 *{ box-sizing:border-box; }
-
+html,body{ height:100%; }
 body{
   margin:0;
-  font-family: system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial;
-  color: var(--text);
+  font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Apple Color Emoji","Segoe UI Emoji";
+  color:var(--text);
   background: var(--bg);
 }
 
-.muted{ color: var(--muted); font-size: 13px; }
-
 /* TOPBAR */
 .topbar{
-  position: sticky;
-  top: 0;
-  z-index: 50;
+  position:sticky;
+  top:0;
+  z-index:10;
   display:flex;
-  gap:14px;
   align-items:center;
   justify-content:space-between;
-  padding: 14px 18px;
-  border-bottom: 1px solid var(--line);
+  gap:16px;
+  padding:14px 18px;
   background: rgba(246,248,252,.88);
   backdrop-filter: blur(10px);
+  border-bottom:1px solid var(--line);
 }
 
 .topbar-left h1{
   margin:0;
-  font-size: 18px;
-  letter-spacing: -.2px;
+  font-size:18px;
+  font-weight:950;
+  letter-spacing:-.01em;
 }
-.topbar-left .muted{ margin-top:2px; }
+.muted{ color:var(--muted); font-size:12.5px; }
+.inline{ display:flex; align-items:center; gap:10px; font-weight:850; }
+#yearSelect{
+  border:1px solid var(--line);
+  border-radius:12px;
+  padding:8px 10px;
+  background:rgba(255,255,255,.9);
+  font-weight:850;
+}
 
 .topbar-chips{
   display:flex;
   gap:10px;
   align-items:stretch;
-  justify-content:center;
   flex-wrap:wrap;
 }
 
 .chipCard{
-  min-width: 180px;
-  padding: 10px 12px;
-  border: 1px solid var(--line);
-  border-radius: 14px;
-  background: rgba(255,255,255,.78);
-  box-shadow: 0 6px 16px rgba(15,23,42,.06);
+  border:1px solid var(--line);
+  border-radius:14px;
+  padding:10px 12px;
+  background:rgba(255,255,255,.75);
+  box-shadow: 0 3px 10px rgba(2,6,23,.05);
+  min-width:180px;
 }
-.chipK{ font-size: 12px; color: var(--muted); }
-.chipV{ font-size: 15px; font-weight: 900; }
+.chipK{ font-size:12px; color:var(--muted); font-weight:900; }
+.chipV{ font-size:18px; font-weight:950; margin-top:2px; }
 
 .topbar-right{
   display:flex;
-  gap:10px;
   align-items:center;
-}
-.inline{
-  display:flex;
-  gap:8px;
-  align-items:center;
-  font-size: 13px;
-  color: var(--muted);
-}
-select{
-  border: 1px solid var(--line);
-  border-radius: 10px;
-  padding: 8px 10px;
-  background: rgba(255,255,255,.9);
+  gap:12px;
+  flex-wrap:wrap;
+  justify-content:flex-end;
 }
 
 .btn{
-  border: 1px solid rgba(37,99,235,.35);
+  border:1px solid rgba(37,99,235,.35);
   background: rgba(37,99,235,.10);
-  color: #0f172a;
-  font-weight: 800;
-  border-radius: 12px;
-  padding: 8px 12px;
+  color: rgba(15,23,42,.92);
+  border-radius:12px;
+  padding:9px 12px;
+  font-weight:950;
   cursor:pointer;
 }
 .btn:hover{ background: rgba(37,99,235,.14); }
 .btn.danger{
-  border-color: rgba(239,68,68,.35);
+  border:1px solid rgba(239,68,68,.30);
   background: rgba(239,68,68,.10);
 }
 .btn.danger:hover{ background: rgba(239,68,68,.14); }
 
-/* LAYOUT */
-.container{
-  max-width: 1180px;
-  margin: 22px auto 80px;
-  padding: 0 14px;
-}
-
-.layout-row{
-  display:grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 16px;
-  margin-bottom: 16px;
-}
-
-@media (max-width: 980px){
-  .layout-row{ grid-template-columns: 1fr; }
-  .topbar{ flex-wrap: wrap; }
-  .topbar-left{ width: 100%; }
+/* PAGE + GRID */
+.page{ padding:18px; }
+.grid{
+  display:flex;
+  flex-direction:column;
+  gap:16px;
+  max-width: 1250px;
+  margin:0 auto;
 }
 
 /* CARDS */
 .card{
   background: var(--card);
-  border: 1px solid var(--line);
-  border-radius: var(--radius);
+  border:1px solid var(--line);
+  border-radius:18px;
   box-shadow: var(--shadow);
-  overflow: visible; /* avoid clipping weirdness */
+  overflow:hidden;
 }
-
-.card-compact{ padding-bottom: 6px; }
-
+.card-compact .cardHead{ padding-bottom:10px; }
 .cardHead{
-  padding: 14px 16px 10px;
+  padding:14px 16px 12px;
 }
-
 .chip{
   display:inline-block;
-  font-size: 11px;
-  font-weight: 900;
-  letter-spacing: .6px;
-  color: var(--blue);
-  margin-bottom: 6px;
+  font-size:11px;
+  font-weight:950;
+  letter-spacing:.08em;
+  color: rgba(37,99,235,.95);
+  text-transform:uppercase;
+  margin-bottom:6px;
 }
-
-.countyChip{ color: #0f766e; }
-
-h2{
+.card h2{
   margin:0;
-  font-size: 16px;
-  letter-spacing: -.2px;
+  font-size:16px;
+  font-weight:950;
 }
+.card p{ margin:6px 0 0; }
+.divider{ height:1px; background: var(--line); }
 
-.divider{
-  height:1px;
-  background: var(--line);
-  margin: 0 16px;
-}
+.steps{ padding:14px 16px 16px; }
+.stepTitle{ font-weight:950; margin-bottom:8px; }
+.steps ol{ margin:0; padding-left:18px; color:var(--muted); font-weight:650; }
+.steps li{ margin:6px 0; }
 
-/* NEW: header row for Property Tax Inputs (title/desc left + apt panel right) */
-.headRow{
+.layout-row{
   display:flex;
-  align-items:flex-start;
-  justify-content:space-between;
-  gap: 14px;
+  gap:16px;
+  align-items:stretch;
 }
-.headLeft{ min-width: 0; }
-.headLeft p{ margin: 6px 0 0; }
+.row-equal > *{ flex:1; }
 
-@media (max-width: 860px){
-  .headRow{ flex-direction: column; }
+@media (max-width: 1000px){
+  .layout-row{ flex-direction:column; }
 }
-
-/* --- Apartment / Complex (Per-Unit) panel --- */
-.aptBox{
-  width: 320px;
-  border:1px solid var(--line);
-  border-radius:14px;
-  padding:10px 12px;
-  background: rgba(255,255,255,.70);
-  box-shadow: 0 6px 16px rgba(15,23,42,.05);
-}
-
-.aptTop{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:12px;
-  margin-bottom:8px;
-}
-
-.aptTitle{
-  font-weight: 950;
-  font-size: 13px;
-  letter-spacing: -.1px;
-}
-
-.aptToggle{
-  display:flex;
-  align-items:center;
-  gap:8px;
-  font-size:12.5px;
-  color: var(--muted);
-  user-select:none;
-  white-space: nowrap;
-}
-
-.aptRow{
-  display:flex;
-  align-items:center;
-  gap:10px;
-  margin:6px 0 8px;
-}
-
-.aptLabel{
-  font-size:12.5px;
-  color: var(--muted);
-  width:44px;
-}
-
-.aptInput{
-  flex:1;
-  width: 100%;
-  padding: 9px 10px;
-  border-radius: 12px;
-  border: 1px solid var(--line);
-  background: rgba(255,255,255,.85);
-  outline: none;
-}
-
-.aptInput:disabled{
-  opacity:.60;
-  cursor:not-allowed;
-}
-
-.aptMini{ font-size: 12px; line-height: 1.25; margin-top: 6px; }
-
-.aptMiniKV{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  margin-top:8px;
-  padding-top:8px;
-  border-top:1px solid var(--line);
-  font-size:12.5px;
-}
-
-.aptMiniKV .k{ color: var(--muted); font-weight: 800; }
-.aptMiniKV .v{ font-weight: 950; }
-
-@media (max-width: 860px){
-  .aptBox{ width: 100%; }
-}
-
-/* STEPS */
-.steps{ padding: 10px 16px 12px; }
-.steps-tight ol{ margin: 8px 0 0 18px; padding: 0; }
-.stepTitle{ font-weight: 900; font-size: 13px; margin-bottom: 6px; }
-.steps-actions{ margin-top: 10px; }
 
 /* FORMS */
 .formGrid{
-  padding: 12px 16px 12px;
+  padding:12px 16px 16px;
   display:grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 10px 12px;
+  gap:12px;
 }
-@media (max-width: 520px){
-  .formGrid{ grid-template-columns: 1fr; }
+.formGrid.twoCol{
+  grid-template-columns: 1fr 1fr;
+}
+@media (max-width: 700px){
+  .formGrid.twoCol{ grid-template-columns: 1fr; }
 }
 
 .field label{
   display:block;
-  font-size: 12px;
-  color: var(--muted);
-  margin-bottom: 6px;
-  font-weight: 700;
+  font-size:12.5px;
+  font-weight:900;
+  color: rgba(15,23,42,.78);
+  margin-bottom:6px;
 }
-input{
-  width: 100%;
-  padding: 10px 12px;
-  border-radius: 12px;
-  border: 1px solid var(--line);
-  background: rgba(255,255,255,.85);
-  outline: none;
+.field input{
+  width:100%;
+  border:1px solid var(--line);
+  background: rgba(255,255,255,.92);
+  border-radius:12px;
+  padding:10px 12px;
+  font-weight:900;
+  outline:none;
 }
-input:focus{
-  border-color: rgba(37,99,235,.45);
-  box-shadow: 0 0 0 4px rgba(37,99,235,.12);
+.field input:focus{
+  border-color: rgba(37,99,235,.40);
+  box-shadow: 0 0 0 3px rgba(37,99,235,.10);
+}
+.countyTintMini{
+  background: rgba(37,99,235,.06) !important;
+  border-color: rgba(37,99,235,.20) !important;
 }
 
-.accent{
-  border-color: rgba(37,99,235,.22);
-  box-shadow: 0 10px 30px rgba(37,99,235,.08);
+/* TOTALS */
+.totalsRow{
+  display:flex;
+  gap:12px;
+  padding:0 16px 16px;
 }
+.totalCard{
+  flex:1;
+  border:1px solid var(--line);
+  border-radius:14px;
+  padding:10px 12px;
+  background: rgba(255,255,255,.75);
+}
+.totalLabel{ font-size:12px; color:var(--muted); font-weight:900; }
+.totalVal{ font-size:18px; font-weight:950; margin-top:2px; }
+.countyTint{ background: rgba(37,99,235,.06); border-color: rgba(37,99,235,.18); }
 
 /* EIT */
 .eitGrid{
-  padding: 12px 16px 12px;
+  padding:12px 16px 16px;
   display:grid;
-  grid-template-columns: 2fr 1fr 1fr;
-  gap: 10px 12px;
-  align-items: stretch;
+  grid-template-columns: 1fr 160px;
+  gap:12px;
+  align-items:start;
 }
-.eit-span2{ grid-column: 1 / span 2; }
-.stat{
-  border: 1px solid var(--line);
-  border-radius: 14px;
-  padding: 10px 12px;
+@media (max-width: 700px){
+  .eitGrid{ grid-template-columns: 1fr; }
+}
+.eitRate{
+  border:1px solid var(--line);
+  border-radius:14px;
+  padding:10px 12px;
   background: rgba(255,255,255,.75);
 }
-.statVal{ font-weight: 950; font-size: 16px; }
-
-@media (max-width: 900px){
-  .eitGrid{ grid-template-columns: 1fr; }
-  .eit-span2{ grid-column: auto; }
-}
-
-/* TOTAL CARDS (NON-FLOATING FIX) */
-.totals{
-  padding: 10px 16px 14px;
-  display:grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 10px 12px;
-}
-.totals-tight{ padding-top: 8px; }
-
-.mini{
-  border: 1px solid var(--line);
-  border-radius: 14px;
-  padding: 10px 12px;
-  background: rgba(255,255,255,.78);
-}
-.mini .k{ font-size: 12px; color: var(--muted); font-weight: 800; }
-.mini .v{ font-size: 15px; font-weight: 950; }
-
-/* THIS is what was causing the "floating" stuff.
-   We keep the class but disable stickiness. */
-.totals-sticky{
-  position: static;   /* was: sticky */
-  bottom: auto;       /* was: 12px */
-  background: transparent;
-}
-
-/* If you use totals-sticky-up anywhere, keep it harmless */
-.totals-sticky-up{
-  margin-top: 10px;
-}
-
-/* TABLE */
-.tableWrap{
-  padding: 6px 12px 0;
-  overflow: auto;   /* safe */
-  max-height: none; /* no collapse */
-}
-
-.catTable{
-  width: 100%;
-  border-collapse: collapse;
-  background: rgba(255,255,255,.65);
-  border: 1px solid var(--line);
-  border-radius: 14px;
-  overflow: hidden;
-}
-
-.catTable th, .catTable td{
-  border-bottom: 1px solid rgba(15,23,42,.08);
-  padding: 10px 12px;              /* slightly tighter */
-  vertical-align: top;
-}
-
-.catTable th{
-  text-align: left;
-  font-size: 12px;
-  color: var(--muted);
-  background: rgba(248,250,252,.9);
-}
-
-.catTable .num{
-  text-align: right;
-  font-variant-numeric: tabular-nums;
-  white-space: nowrap;
-}
-
-/* SCHOOLS TYPOGRAPHY (THIS is the "text too big" fix) */
-.catName{
-  font-weight: 800;   /* down from 950 */
-  font-size: 14px;    /* down from bigger feel */
-  letter-spacing: -.1px;
-}
-
-.catDesc{
-  font-size: 11.5px;  /* smaller + calmer */
-  color: var(--muted);
-  margin-top: 3px;
-  line-height: 1.2;
-}
-
-.childRow td{
-  background: rgba(248,250,252,.65);
-}
-
-.childRow .catName{
-  font-weight: 700;
-  font-size: 13px;
-}
-
-/* Memo-only (included / not additional) rows */
-.memoRow td{
-  background: rgba(241,245,249,.55);
-}
-
-.memoRow .catName{
-  font-weight: 600;
-  opacity: .9;
-}
-
-.memoRow .catDesc{
-  font-style: italic;
-  opacity: .85;
-}
-
-.badge{
-  display:inline-block;
-  margin-left: 8px;
-  padding: 2px 8px;
-  border-radius: 999px;
-  border: 1px solid var(--line);
-  font-size: 11px;
-  line-height: 1.4;
-  color: var(--muted);
-  background: rgba(255,255,255,.7);
-  vertical-align: middle;
-}
-
-/* BREAKDOWN list */
-.reflist{
-  padding: 10px 16px 4px;
+.eitRateLabel{ font-size:12px; color:var(--muted); font-weight:900; }
+.eitRateVal{ font-size:16px; font-weight:950; margin-top:2px; }
+.eitTotals{
+  grid-column: 1 / -1;
   display:flex;
-  flex-direction: column;
-  gap: 10px;
+  gap:12px;
 }
+.eitBox{
+  flex:1;
+  border:1px solid var(--line);
+  border-radius:14px;
+  padding:10px 12px;
+  background: rgba(255,255,255,.75);
+}
+.eitBoxLabel{ font-size:12px; color:var(--muted); font-weight:900; }
+.eitBoxVal{ font-size:18px; font-weight:950; margin-top:2px; }
 
+/* SCHOOLS */
+.schoolsTop{
+  display:flex;
+  gap:12px;
+  padding:12px 16px 0;
+  flex-wrap:wrap;
+}
+.schoolsStat{
+  border:1px solid var(--line);
+  border-radius:14px;
+  padding:10px 12px;
+  background: rgba(255,255,255,.75);
+  min-width: 240px;
+}
+.schoolsStatLabel{ font-size:12px; color:var(--muted); font-weight:900; }
+.schoolsStatVal{ font-size:18px; font-weight:950; margin-top:2px; }
+
+.schoolsTable{
+  width:100%;
+  border-collapse:separate;
+  border-spacing:0;
+  margin-top:12px;
+}
+.schoolsTable th, .schoolsTable td{
+  padding:10px 12px;
+  border-bottom:1px solid rgba(15,23,42,.08);
+  vertical-align:top;
+}
+.schoolsTable th{
+  text-align:left;
+  font-size:12px;
+  color:var(--muted);
+  font-weight:950;
+  background: rgba(255,255,255,.55);
+}
+.schoolsTable .num{ text-align:right; white-space:nowrap; }
+.catName{ font-weight:950; }
+.catDesc{ font-size:12px; color:var(--muted); margin-top:3px; line-height:1.35; }
+.childRow td{ background: rgba(255,255,255,.45); }
+
+/* REFERENCE */
+.refTotals{
+  display:flex;
+  gap:12px;
+  padding:12px 16px 0;
+  flex-wrap:wrap;
+}
+.refTotal{
+  flex:1;
+  border:1px solid var(--line);
+  border-radius:14px;
+  padding:10px 12px;
+  background: rgba(255,255,255,.75);
+  min-width: 200px;
+}
+.refTotalLabel{ font-size:12px; color:var(--muted); font-weight:900; }
+.refTotalVal{ font-size:18px; font-weight:950; margin-top:2px; }
+
+.refList{ padding:12px 16px 16px; display:flex; flex-direction:column; gap:10px; }
 .refRow{
-  border: 1px solid var(--line);
-  border-radius: 14px;
-  padding: 10px 12px;
-  background: rgba(255,255,255,.78);
   display:flex;
-  gap: 10px;
-  align-items: flex-start;
-  justify-content: space-between;
+  justify-content:space-between;
+  gap:12px;
+  border:1px solid rgba(15,23,42,.12);
+  border-radius:14px;
+  padding:10px 12px;
+  background: rgba(255,255,255,.55);
 }
-.refLeft{ min-width: 0; }
-.refTitle{ font-weight: 950; font-size: 13px; }
-.refDesc{ font-size: 12px; color: var(--muted); margin-top: 4px; line-height: 1.25; }
-.refAmt{
-  font-weight: 950;
-  color: var(--blue);
-  white-space: nowrap;
-  margin-left: 10px;
+.refLeft{ flex:1; min-width:0; }
+.refTitle{ font-weight:950; }
+.refDesc{ margin-top:4px; color:var(--muted); font-size:12.5px; line-height:1.35; }
+.refAmt{ font-weight:950; white-space:nowrap; }
+
+.countyHighlightRow{
+  background: rgba(37,99,235,.06);
+  border-color: rgba(37,99,235,.18);
 }
 
 .refSep{
-  margin-top: 4px;
-  padding: 8px 10px;
-  border-radius: 14px;
-  border: 1px solid rgba(13,148,136,.22);
-  background: rgba(16,185,129,.10);
+  padding:8px 10px;
+  border-radius:12px;
+  background: rgba(15,23,42,.04);
+  border:1px dashed rgba(15,23,42,.18);
 }
 .refSepTitle{
-  font-weight: 950;
-  color: #0f766e;
-  font-size: 12px;
+  font-weight:950;
+  color: rgba(15,23,42,.72);
 }
 
-.countyItemRow{
-  border-color: rgba(13,148,136,.22);
-  background: rgba(16,185,129,.08);
-}
-.countyHighlightRow{
-  border-color: rgba(13,148,136,.25);
-  background: rgba(16,185,129,.06);
-}
-
-/* Shading for county-linked inputs/totals */
-.countyTintMini{
-  border-color: rgba(13,148,136,.22) !important;
-  background: rgba(16,185,129,.08) !important;
+/* Demo preset block in the topbar (right side) */
+.demoPresets{
+  display:flex;
+  flex-direction:column;
+  align-items:flex-end;
+  gap:6px;
+  margin-left:10px;
 }
 
-.refnote{
-  padding: 10px 16px 14px;
-  color: var(--muted);
-  font-size: 12px;
-  line-height: 1.3;
+.demoPresetsTitle{
+  font-size:12px;
+  font-weight:900;
+  color:var(--muted);
+  letter-spacing:.02em;
+}
+
+.demoPresetsBtns{
+  display:flex;
+  gap:10px;
+  align-items:center;
+  flex-wrap:wrap;
+  justify-content:flex-end;
+}
+
+/* Apartment / per-unit box */
+.aptBox{
+  border:1px solid rgba(15,23,42,.14);
+  border-radius:14px;
+  padding:10px 12px;
+  margin:10px 16px 12px;
+  background:rgba(255,255,255,.45);
+}
+.aptTop{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  margin-bottom:8px;
+}
+.aptTitle{ font-weight:950; }
+.aptToggle{ display:flex; align-items:center; gap:8px; font-weight:800; }
+.aptToggle input{ transform: translateY(1px); }
+
+.aptRow{
+  display:grid;
+  grid-template-columns: 220px 1fr;
+  gap:12px;
+  align-items:start;
+}
+.aptMeta .small{ font-size:12.5px; line-height:1.35; }
+.aptFactor{ margin-top:6px; font-weight:900; color: var(--muted); }
+
+/* simple indentation helpers used by JS table rows */
+.caret{ display:inline-block; width:18px; color:var(--muted); }
+.childIndent{ display:inline-block; width:18px; }
+
+@media (max-width: 900px){
+  .demoPresets{ align-items:stretch; width:100%; }
+  .demoPresetsBtns{ justify-content:flex-start; }
+  .aptRow{ grid-template-columns: 1fr; }
+  .aptBox{ margin:10px 16px 12px; }
+}
+
+
+/* --- Demo Presets inside PROPERTY TAX DISTRIBUTION card (right-side column) --- */
+.stepsRow{
+  display:flex;
+  gap:16px;
+  padding:14px 16px 16px;
+  align-items:stretch;
+}
+.stepsRow .steps{
+  flex: 1 1 auto;
+  padding:0; /* wrapper owns padding */
+}
+.stepsRow .demoPresets{
+  flex: 0 0 360px; /* adjust width if needed */
+  align-items:stretch;
+  gap:6px;
+  margin-left:0;
+}
+.stepsRow .demoPresetsBtns{
+  display:flex;
+  flex-direction:column;
+  align-items:stretch;
+  gap:10px;
+}
+.stepsRow .demoPresetsBtns .btn{
+  width:100%;
+  text-align:left;
+}
+
+@media (max-width: 900px){
+  .stepsRow{ flex-direction:column; }
+  .stepsRow .demoPresets{ flex-basis:auto; }
+}
+/* ========================================================= */
+/* Property Tax Inputs — match County Portion two-column grid */
+/* ========================================================= */
+
+/* Force side-by-side inputs in PROPERTY TAX INPUTS card */
+.card-compact .formGrid{
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px 14px;
+}
+
+/* Mobile fallback */
+@media (max-width: 720px){
+  .card-compact .formGrid{
+    grid-template-columns: 1fr;
+  }
 }
