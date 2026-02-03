@@ -25,6 +25,96 @@
   const unitCount = $("unitCount");
   const perUnitStatus = $("perUnitStatus");
 
+  // Auto-fill (Butler County)
+  const autoAddress = $("autoAddress");
+  const autoFillBtn = $("autoFillBtn");
+  const openAuditorBtn = $("openAuditorBtn");
+  const autoStatus = $("autoStatus");
+
+  // Your PHP API endpoint on HostGator
+  const BUTLER_API_URL = "https://tri-star-automotive.com/api/butler-tax.php";
+
+  function setAutoStatus(msg, kind) {
+    if (!autoStatus) return;
+    autoStatus.textContent = msg || "";
+    autoStatus.classList.remove("ok","bad");
+    if (kind) autoStatus.classList.add(kind);
+  }
+
+  function applyMoneyToInput(id, amountStr) {
+    const el = inputs[id];
+    if (!el) return;
+    // amountStr like "$1,626.45" -> "1626.45"
+    const cleaned = String(amountStr || "").replace(/[^0-9.\-]/g, "");
+    el.value = cleaned;
+  }
+
+  async function autoFillFromAddress() {
+    if (!autoAddress || !autoFillBtn) return;
+    const addr = (autoAddress.value || "").trim();
+    if (!addr) {
+      setAutoStatus("Enter an address first.", "bad");
+      return;
+    }
+
+    autoFillBtn.disabled = true;
+    setAutoStatus("Looking up parcel + pulling tax distribution…", "");
+
+    try {
+      const url = `${BUTLER_API_URL}?address=${encodeURIComponent(addr)}`;
+      const res = await fetch(url, { method: "GET" });
+      const data = await res.json().catch(() => null);
+
+      if (!res.ok || !data || data.ok !== true) {
+        const msg = (data && data.error) ? data.error : `HTTP ${res.status}`;
+        throw new Error(msg);
+      }
+
+      // Fill Tax Distribution inputs
+      const dist = data?.taxes?.distribution || [];
+      const map = new Map(dist.map(r => [String(r.authority || "").trim().toLowerCase(), r.amount]));
+
+      const getAmt = (...keys) => {
+        for (const k of keys) {
+          const v = map.get(String(k).toLowerCase());
+          if (v) return v;
+        }
+        return "";
+      };
+
+      applyMoneyToInput("taxButlerCounty", getAmt("Butler County"));
+      applyMoneyToInput("taxFairfieldCsd", getAmt("Fairfield Csd", "Fairfield CSD"));
+      applyMoneyToInput("taxFairfieldCity", getAmt("Fairfield City"));
+      applyMoneyToInput("taxButlerJvsd", getAmt("Butler County Jvsd", "Butler County JVSD"));
+      applyMoneyToInput("taxMetroParks", getAmt("Metro Parks Of Butler County", "Metro Parks of Butler County"));
+      applyMoneyToInput("taxLibrary", getAmt("Lane Public Library District"));
+      // Total Tax is computed by the form; we don't need to set it.
+
+      // Fill County Portion Only inputs (if present)
+      const county = data?.taxes?.countyPortionOnly || [];
+      const cmap = new Map(county.map(r => [String(r.authority || "").trim().toLowerCase(), r.amount]));
+
+      const cGet = (key) => cmap.get(String(key).toLowerCase()) || "";
+
+      applyMoneyToInput("countyGeneralFund", cGet("General Fund"));
+      applyMoneyToInput("countyDd", cGet("Developmental Disabilities"));
+      applyMoneyToInput("countyMentalHealth", cGet("Mental Health"));
+      applyMoneyToInput("countyChildren", cGet("Children Services"));
+      applyMoneyToInput("countySenior", cGet("Senior Citizens"));
+      // Optional total field
+      if (inputs.countyTotal) applyMoneyToInput("countyTotal", cGet("County Total Tax"));
+
+      onAnyChange();
+      const pin = data?.picked?.PIN ? ` (PIN ${data.picked.PIN})` : "";
+      setAutoStatus(`Auto-fill complete${pin}. You can edit any box below.`, "ok");
+    } catch (err) {
+      setAutoStatus(`Auto-fill failed: ${err.message || err}`, "bad");
+      console.error(err);
+    } finally {
+      autoFillBtn.disabled = false;
+    }
+  }
+
   const inputs = {
     taxButlerCounty: $("taxButlerCounty"),
     taxFairfieldCsd: $("taxFairfieldCsd"),
@@ -354,6 +444,8 @@
     $("openAuditorBtn")?.addEventListener("click", () => {
       window.open("https://auditor.bcohio.gov/", "_blank");
     });
+
+    autoFillBtn?.addEventListener("click", autoFillFromAddress);
 
     $("demoHouseBtn")?.addEventListener("click", () => fillExample("house"));
     $("demoAptBtn")?.addEventListener("click", () => fillExample("apt72"));
