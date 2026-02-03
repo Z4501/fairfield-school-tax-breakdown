@@ -1,0 +1,310 @@
+{
+  "district": "Fairfield City School District",
+  "years": [
+    2015,
+    2016,
+    2017,
+    2018,
+    2019,
+    2020,
+    2021,
+    2022,
+    2023,
+    2024
+  ],
+  "uses": [
+    {
+      "id": "instruction",
+      "name": "Instruction",
+      "values": {
+        "2015": 52195183,
+        "2016": 52690396,
+        "2017": 61987223,
+        "2018": 33098836,
+        "2019": 58893995,
+        "2020": 70279147,
+        "2021": 77623177,
+        "2022": 67368734,
+        "2023": 77036474,
+        "2024": 79052442
+      },
+      "children": [
+        {
+          "id": "instruction_regular",
+          "name": "Regular Instruction",
+          "values": {
+            "2015": 35525772,
+            "2016": 36180041,
+            "2017": 42407668,
+            "2018": 20748089,
+            "2019": 40439397,
+            "2020": 47811310,
+            "2021": 53624986,
+            "2022": 50319122,
+            "2023": 55091717,
+            "2024": 55817696
+          },
+          "desc": "Standard K\u201312 classroom instruction (non-special education)."
+        },
+        {
+          "id": "instruction_special",
+          "name": "Special Education",
+          "values": {
+            "2015": 12457874,
+            "2016": 12710663,
+            "2017": 14769569,
+            "2018": 7689624,
+            "2019": 13991396,
+            "2020": 17891829,
+            "2021": 19093169,
+            "2022": 16260357,
+            "2023": 20939355,
+            "2024": 22167510
+          },
+          "desc": "Special education instruction and required services (IEPs, related support)."
+        },
+        {
+          "id": "instruction_vocational",
+          "name": "Vocational Instruction",
+          "values": {
+            "2015": 0,
+            "2016": 0,
+            "2017": 0,
+            "2018": 0,
+            "2019": 0,
+            "2020": 0,
+            "2021": 0,
+            "2022": 0,
+            "2023": 5072,
+            "2024": 9090
+          },
+          "desc": "Career-tech/vocational instruction (only appears when the district breaks it out separately)."
+        },
+        {
+          "id": "instruction_other",
+          "name": "Other Instruction",
+          "values": {
+            "2015": 4211537,
+            "2016": 3799692,
+            "2017": 4809986,
+            "2018": 4661123,
+            "2019": 4463202,
+            "2020": 4576008,
+            "2021": 4905022,
+            "2022": 789255,
+            "2023": 1000330,
+            "2024": 1058146
+          },
+          "desc": "Other instructional programs not classified elsewhere (district coding varies)."
+        },
+        {
+          "id": "instruction_benefits",
+          "name": "Health Insurance & Other Benefits (Included \u2014 Not Additional)",
+          "values": {
+            "2015": 9846317,
+            "2016": 10124890,
+            "2017": 11209340,
+            "2018": 14782956,
+            "2019": 11872115,
+            "2020": 16245118,
+            "2021": 17012455,
+            "2022": 16412589,
+            "2023": 17193308,
+            "2024": 18210477
+          },
+          "desc": "District-paid employee benefits embedded within functional costs above (shown separately for transparency; not added again).",
+          "included": true
+        },
+        {
+          "id": "instruction_strs",
+          "name": "STRS \u2014 Teacher Retirement (State Mandated, Included)",
+          "values": {
+            "2015": 4817232,
+            "2016": 5090808,
+            "2017": 5318004,
+            "2018": 5782620,
+            "2019": 6198828,
+            "2020": 6701832,
+            "2021": 7048944,
+            "2022": 7406448,
+            "2023": 7615080,
+            "2024": 7807248
+          },
+          "desc": "Employer contributions to STRS for certified staff (state-mandated; included in functional totals above).",
+          "included": true
+        },
+        {
+          "id": "instruction_sers",
+          "name": "SERS \u2014 Staff Retirement (State Mandated, Included)",
+          "values": {
+            "2015": 1629470,
+            "2016": 1648613,
+            "2017": 1730369,
+            "2018": 1805207,
+            "2019": 1904711,
+            "2020": 2013974,
+            "2021": 2003563,
+            "2022": 2068424,
+            "2023": 2170004,
+            "2024": 2138946
+          },
+          "desc": "Employer contributions to SERS for non-certified staff (state-mandated; included in functional totals above).",
+          "included": true
+        }
+      ],
+      "desc": "Classroom teaching costs (what most people think of as 'instruction')."
+    },
+    {
+      "id": "support",
+      "name": "Support Services",
+      "values": {
+        "2015": 15229859,
+        "2016": 15245145,
+        "2017": 18139305,
+        "2018": 10046074,
+        "2019": 18346111,
+        "2020": 23688636,
+        "2021": 23086608,
+        "2022": 20149154,
+        "2023": 24377320,
+        "2024": 24832464
+      },
+      "desc": "Student + district support (counselors, nurses, aides, principals, central office, IT, HR, fiscal). Not classroom teaching, but keeps schools running."
+    },
+    {
+      "id": "operations",
+      "name": "Operations & Maintenance",
+      "values": {
+        "2015": 5441327,
+        "2016": 5730829,
+        "2017": 6862131,
+        "2018": 1771651,
+        "2019": 6728287,
+        "2020": 6526002,
+        "2021": 7384020,
+        "2022": 6717475,
+        "2023": 8061381,
+        "2024": 7116030
+      },
+      "desc": "Buildings & grounds (utilities, custodians, maintenance, repairs, security/grounds)."
+    },
+    {
+      "id": "transportation",
+      "name": "Transportation",
+      "values": {
+        "2015": 6023683,
+        "2016": 5574146,
+        "2017": 7627099,
+        "2018": 4864748,
+        "2019": 6951465,
+        "2020": 7703527,
+        "2021": 8300440,
+        "2022": 8103276,
+        "2023": 9241562,
+        "2024": 8642906
+      },
+      "desc": "Busing & transportation (drivers, routing, fleet, fuel, garage)."
+    },
+    {
+      "id": "food",
+      "name": "Food / Non-Instructional",
+      "values": {
+        "2015": 4781145,
+        "2016": 5079069,
+        "2017": 5297270,
+        "2018": 3196704,
+        "2019": 5079028,
+        "2020": 6235214,
+        "2021": 5835796,
+        "2022": 6154403,
+        "2023": 6998054,
+        "2024": 7049520
+      },
+      "desc": "Cafeterias & meals (food purchases, kitchen staff, meal programs)."
+    },
+    {
+      "id": "extracurricular",
+      "name": "Extracurricular",
+      "values": {
+        "2015": 1570907,
+        "2016": 1359208,
+        "2017": 2136820,
+        "2018": 1121487,
+        "2019": 1785500,
+        "2020": 2060145,
+        "2021": 1962557,
+        "2022": 1962016,
+        "2023": 2312283,
+        "2024": 2254859
+      },
+      "desc": "Sports, clubs, and student activities outside core classes."
+    },
+    {
+      "id": "interest",
+      "name": "Interest & Fiscal",
+      "values": {
+        "2015": 3764240,
+        "2016": 3283493,
+        "2017": 3215423,
+        "2018": 3189667,
+        "2019": 3012675,
+        "2020": 2799326,
+        "2021": 1907938,
+        "2022": 2013548,
+        "2023": 1986764,
+        "2024": 1972933
+      },
+      "desc": "Debt costs (bond interest) and related financing costs (includes bond issuance costs when reported)."
+    }
+  ],
+  "schemaVersion": 3,
+  "auditBasis": "GAAP \u2014 Governmental Activities (Statement of Activities) \u2014 expenses only",
+  "auditScopeNote": "Totals and category values come from the GAAP Statement of Activities (government-wide). Benefits/STRS/SERS lines are shown for transparency only and are already included in functional totals; they must not be added again.",
+  "auditAnchors": {
+    "2015": {
+      "source_pdf": "Fairfield_CSD_15-Butler.pdf",
+      "statement_of_activities_page_index_0based": 21
+    },
+    "2016": {
+      "source_pdf": "Fairfield_CSD_16-Butler.pdf",
+      "statement_of_activities_page_index_0based": 20
+    },
+    "2017": {
+      "source_pdf": "Fairfield_CSD_17-Butler.pdf",
+      "statement_of_activities_page_index_0based": 20
+    },
+    "2018": {
+      "source_pdf": "Fairfield_CSD_18-Butler.pdf",
+      "statement_of_activities_page_index_0based": 22
+    },
+    "2019": {
+      "source_pdf": "Fairfield_CSD_19-Butler.pdf",
+      "statement_of_activities_page_index_0based": 19
+    },
+    "2020": {
+      "source_pdf": "Fairfield_City_School_District_20-Butler_FINAL_unlocked.pdf",
+      "statement_of_activities_page_index_0based": 19
+    },
+    "2021": {
+      "source_pdf": "Fairfield_City_School_District_2021-Butler_FINAL_unlocked.pdf",
+      "statement_of_activities_page_index_0based": 20
+    },
+    "2022": {
+      "source_pdf": "Fairfield_City_School_District_2022_Butler_FINAL (1)_unlocked.pdf",
+      "statement_of_activities_page_index_0based": 20
+    },
+    "2023": {
+      "source_pdf": "Fairfield_City_School_District_2023_Butler_FINAL_unlocked.pdf",
+      "statement_of_activities_page_index_0based": 20
+    },
+    "2024": {
+      "source_pdf": "Fairfield_City_School_District_2024_Butler_FINAL (1)_unlocked.pdf",
+      "statement_of_activities_page_index_0based": 20
+    }
+  },
+  "yearNotes": {},
+  "classificationNotes": [
+    "For every year, category totals tie exactly to the GAAP Statement of Activities 'Totals' (or 'Total Governmental Activities') expense column.",
+    "In FY2015 and FY2020, 'Bond Issuance Costs' is reported as a separate line on the Statement of Activities and is included here under 'Interest & Fiscal' so the totals reconcile."
+  ]
+}
