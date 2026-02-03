@@ -64,13 +64,25 @@
         <div class="divider"></div>
 
         <div class="steps">
-          <div class="stepTitle">Step 1 — Copy these numbers from the Auditor Tax Summary</div>
-          <ol>
-            <li>Open your property in Butler County Auditor Property Search</li>
-            <li>Click <b>Tax Summary</b></li>
-            <li>Under <b>Tax Distribution</b>, copy each <b>TAX AMOUNT</b> below</li>
-          </ol>
-          <button class="btn" id="openAuditorBtn" type="button">Open Auditor Search</button>
+          <div class="stepTitle">Auto-fill from your address (optional)</div>
+          <p class="help">
+            Enter your street address. We’ll look up your Butler County parcel and pull the <b>Tax Distribution</b> numbers automatically.
+            You can still paste/edit everything manually below.
+          </p>
+
+          <div class="autoFillRow">
+            <input id="autoAddress" class="textInput" type="text"
+              placeholder="e.g., 5572 Chesapeake Way, Fairfield, OH"
+              autocomplete="street-address" />
+            <button class="btn primary" id="autoFillBtn" type="button">Auto-fill Tax Distribution</button>
+            <button class="btn" id="openAuditorBtn" type="button">Open Auditor Search</button>
+          </div>
+
+          <div id="autoStatus" class="autoStatus" aria-live="polite"></div>
+
+          <p class="help small">
+            Tip: spelling matters. If it doesn’t match, try just the street number + base street name.
+          </p>
         </div>
       </article>
 
