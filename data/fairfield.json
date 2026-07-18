@@ -10,7 +10,8 @@
     2021,
     2022,
     2023,
-    2024
+    2024,
+    2025
   ],
   "uses": [
     {
@@ -26,7 +27,8 @@
         "2021": 77623177,
         "2022": 67368734,
         "2023": 77036474,
-        "2024": 79052442
+        "2024": 79052442,
+        "2025": 76014197
       },
       "children": [
         {
@@ -42,9 +44,10 @@
             "2021": 53624986,
             "2022": 50319122,
             "2023": 55091717,
-            "2024": 55817696
+            "2024": 55817696,
+            "2025": 52466599
           },
-          "desc": "Standard K\u201312 classroom instruction (non-special education)."
+          "desc": "Standard K–12 classroom instruction (non-special education)."
         },
         {
           "id": "instruction_special",
@@ -59,7 +62,8 @@
             "2021": 19093169,
             "2022": 16260357,
             "2023": 20939355,
-            "2024": 22167510
+            "2024": 22167510,
+            "2025": 22477649
           },
           "desc": "Special education instruction and required services (IEPs, related support)."
         },
@@ -76,7 +80,8 @@
             "2021": 0,
             "2022": 0,
             "2023": 5072,
-            "2024": 9090
+            "2024": 9090,
+            "2025": 1558
           },
           "desc": "Career-tech/vocational instruction (only appears when the district breaks it out separately)."
         },
@@ -93,13 +98,14 @@
             "2021": 4905022,
             "2022": 789255,
             "2023": 1000330,
-            "2024": 1058146
+            "2024": 1058146,
+            "2025": 1068391
           },
           "desc": "Other instructional programs not classified elsewhere (district coding varies)."
         },
         {
           "id": "instruction_benefits",
-          "name": "Health Insurance & Other Benefits (Included \u2014 Not Additional)",
+          "name": "Health Insurance & Other Benefits (Included — Not Additional)",
           "values": {
             "2015": 9846317,
             "2016": 10124890,
@@ -110,14 +116,15 @@
             "2021": 17012455,
             "2022": 16412589,
             "2023": 17193308,
-            "2024": 18210477
+            "2024": 18210477,
+            "2025": null
           },
-          "desc": "District-paid employee benefits embedded within functional costs above (shown separately for transparency; not added again).",
+          "desc": "District-paid employee benefits embedded within functional costs above (shown separately for transparency; not added again). FY2025 is unavailable as a directly comparable standalone figure in the FY2025 GAAP audit.",
           "included": true
         },
         {
           "id": "instruction_strs",
-          "name": "STRS \u2014 Teacher Retirement (State Mandated, Included)",
+          "name": "STRS — Teacher Retirement (State Mandated, Included)",
           "values": {
             "2015": 4817232,
             "2016": 5090808,
@@ -128,14 +135,15 @@
             "2021": 7048944,
             "2022": 7406448,
             "2023": 7615080,
-            "2024": 7807248
+            "2024": 7807248,
+            "2025": 8122032
           },
           "desc": "Employer contributions to STRS for certified staff (state-mandated; included in functional totals above).",
           "included": true
         },
         {
           "id": "instruction_sers",
-          "name": "SERS \u2014 Staff Retirement (State Mandated, Included)",
+          "name": "SERS — Staff Retirement (State Mandated, Included)",
           "values": {
             "2015": 1629470,
             "2016": 1648613,
@@ -146,7 +154,8 @@
             "2021": 2003563,
             "2022": 2068424,
             "2023": 2170004,
-            "2024": 2138946
+            "2024": 2138946,
+            "2025": 2188571
           },
           "desc": "Employer contributions to SERS for non-certified staff (state-mandated; included in functional totals above).",
           "included": true
@@ -167,7 +176,8 @@
         "2021": 23086608,
         "2022": 20149154,
         "2023": 24377320,
-        "2024": 24832464
+        "2024": 24832464,
+        "2025": 22660801
       },
       "desc": "Student + district support (counselors, nurses, aides, principals, central office, IT, HR, fiscal). Not classroom teaching, but keeps schools running."
     },
@@ -184,7 +194,8 @@
         "2021": 7384020,
         "2022": 6717475,
         "2023": 8061381,
-        "2024": 7116030
+        "2024": 7116030,
+        "2025": 8201304
       },
       "desc": "Buildings & grounds (utilities, custodians, maintenance, repairs, security/grounds)."
     },
@@ -201,7 +212,8 @@
         "2021": 8300440,
         "2022": 8103276,
         "2023": 9241562,
-        "2024": 8642906
+        "2024": 8642906,
+        "2025": 8644126
       },
       "desc": "Busing & transportation (drivers, routing, fleet, fuel, garage)."
     },
@@ -218,9 +230,10 @@
         "2021": 5835796,
         "2022": 6154403,
         "2023": 6998054,
-        "2024": 7049520
+        "2024": 7049520,
+        "2025": 7832621
       },
-      "desc": "Cafeterias & meals (food purchases, kitchen staff, meal programs)."
+      "desc": "Cafeterias, meals, food purchases, kitchen staff, meal programs, and other non-instructional services."
     },
     {
       "id": "extracurricular",
@@ -235,7 +248,8 @@
         "2021": 1962557,
         "2022": 1962016,
         "2023": 2312283,
-        "2024": 2254859
+        "2024": 2254859,
+        "2025": 2015831
       },
       "desc": "Sports, clubs, and student activities outside core classes."
     },
@@ -252,13 +266,14 @@
         "2021": 1907938,
         "2022": 2013548,
         "2023": 1986764,
-        "2024": 1972933
+        "2024": 1972933,
+        "2025": 1939623
       },
       "desc": "Debt costs (bond interest) and related financing costs (includes bond issuance costs when reported)."
     }
   ],
   "schemaVersion": 3,
-  "auditBasis": "GAAP \u2014 Governmental Activities (Statement of Activities) \u2014 expenses only",
+  "auditBasis": "GAAP — Governmental Activities (Statement of Activities) — expenses only",
   "auditScopeNote": "Totals and category values come from the GAAP Statement of Activities (government-wide). Benefits/STRS/SERS lines are shown for transparency only and are already included in functional totals; they must not be added again.",
   "auditAnchors": {
     "2015": {
@@ -300,11 +315,20 @@
     "2024": {
       "source_pdf": "Fairfield_City_School_District_2024_Butler_FINAL (1)_unlocked.pdf",
       "statement_of_activities_page_index_0based": 20
+    },
+    "2025": {
+      "source_pdf": "Fairfield_CSD_25_Butler_FINAL.pdf",
+      "statement_of_activities_page_index_0based": 18
     }
   },
-  "yearNotes": {},
+  "yearNotes": {
+    "2025": "FY2025 governmental-activities expenses total $127,308,503. The FY2025 audit does not provide a directly comparable standalone Health Insurance & Other Benefits figure, so that informational value is null rather than incorrectly reported as zero."
+  },
   "classificationNotes": [
-    "For every year, category totals tie exactly to the GAAP Statement of Activities 'Totals' (or 'Total Governmental Activities') expense column.",
-    "In FY2015 and FY2020, 'Bond Issuance Costs' is reported as a separate line on the Statement of Activities and is included here under 'Interest & Fiscal' so the totals reconcile."
+    "For every year, category totals tie exactly to the GAAP Statement of Activities 'Totals' or 'Total Governmental Activities' expense column.",
+    "In FY2015 and FY2020, 'Bond Issuance Costs' is reported as a separate line on the Statement of Activities and is included here under 'Interest & Fiscal' so the totals reconcile.",
+    "For FY2025, Support Services equals Pupil, Instructional Staff, General Administration, School Administration, Fiscal, Business, and Central.",
+    "For FY2025, Operation of Non-Instructional Services is classified as Food / Non-Instructional.",
+    "The FY2025 verified category total is $127,308,503."
   ]
 }
